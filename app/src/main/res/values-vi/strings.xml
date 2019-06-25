@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">PROBOX2 APEX UI</string>
+    
+    <string name="action_settings">Cài đặt</string>
+
+    <!--    for Home Tab    -->
+    <string name="tab1">Trang chủ</string>
+    <string name="tab2">Tất cả ứng dụng</string>
+
+    <!--    for Home Icon   -->
+    <string name="icon_label_kodi">KODI</string>
+    <string name="icon_label_google_play">Google Play</string>
+    <string name="icon_label_task_killer">Tắt ứng dụng chạy ngầm</string>
+    <string name="icon_label_movie">Phim truyện và Truyền hình</string>
+    <string name="icon_label_favourites">Ưa thích</string>
+    <string name="icon_label_music">Âm nhạc</string>
+    <string name="icon_label_stream">Luồng truyền</string>
+    <string name="icon_label_internet">Mạng Internet</string>
+    <string name="icon_label_game">Trò chơi</string>
+    <string name="icon_label_photo">Hình ảnh</string>
+    <string name="icon_label_social">Mạng xã hội</string>
+    <string name="icon_label_files">Tập tin</string>
+
+    <!--weather -->
+    <string name="weather_no_city">Không có thành phố</string>
+    <string name="weather_edit_city_dialog_ok">OK</string>
+
+    <!--Toast-->
+    <string name="shortcut_out_of_range">Quá giới hạn, không thể thêm shortcut!</string>
+    <string name="launcher_default_cancel">Giao diện mặc định đã bị hủy bỏ</string>
+    <string name="weather_edit_city_dialog_not_empty">Hãy chắc chắn bạn nhập đúng!</string>
+    <string name="weather_edit_city_dialog_tips">Nhập tên thành phố của bạn</string>
+    <string name="weather_edit_city_error">Không thể tìm thấy thành phố này, vui lòng nhập lại!</string>
+    <string name="noapp">ứng dụng này chưa được cài đặt!</string>
+    <string name="clear_memory_done">Tất cả ứng dụng đã được xóa và bộ nhớ đã được giải phóng!</string>
+
+    <!-- package & activity names -->
+    <!--WARRING!!! DON NOT TRANSLATE THEM !!!-->
+    <string name="setting_pkg">com.android.tv.settings</string>
+    <string name="setting_main_activity">com.android.tv.settings.MainSettings</string>
+    <string name="setting_unmount_sd_activity">"com.android.tv.settings.device.storage.UnmountActivity"</string>
+    <string name="unmount_sd_volume_id">android.os.storage.extra.VOLUME_ID</string>
+    <string name="unmount_sd_volume_desc">UnmountActivity.volumeDesc</string>
+
+    <string name="kodi_media">org.xbmc.kodi</string>
+    <string name="google_play">com.android.vending</string>
+    <string name="file_brower">com.droidlogic.FileBrower</string>
+
+</resources>

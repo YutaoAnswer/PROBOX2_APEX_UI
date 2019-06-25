@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/item_apps_layout_width"
+    android:layout_height="@dimen/item_apps_layout_height"
+    android:background="@mipmap/nav_icon_bg">
+
+    <ImageView
+        android:id="@+id/item_category_add"
+        android:layout_width="@dimen/item_apps_layout_width"
+        android:layout_height="@dimen/item_apps_layout_height"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"/>
+
+    <ImageView
+        android:id="@+id/apps_icon_selected"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/item_select_img"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/item_apps_gridview_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/item_apps_gridview_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/home_margin_between_text_and_image"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textSize="@dimen/home_text_size_small" />
+
+    </LinearLayout>
+</RelativeLayout>
