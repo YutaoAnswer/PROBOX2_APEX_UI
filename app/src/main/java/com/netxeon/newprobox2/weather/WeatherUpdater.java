@@ -21,7 +21,6 @@ public class WeatherUpdater implements YahooWeatherInfoListener,
 	public void onFailConnection(Exception arg0) {
 		mWeatherHandler.sendEmptyMessage(WeatherUtils.MSG_WEATHER_NETWORK_DISCONNECTED);
 		L.d("WeatherUpdater.gotWeatherInfo() onFailConnection");
-
 	}
 
 	@Override

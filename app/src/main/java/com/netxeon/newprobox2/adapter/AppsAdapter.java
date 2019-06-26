@@ -48,7 +48,7 @@ public class AppsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
 
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.item_apps_gridview, null);

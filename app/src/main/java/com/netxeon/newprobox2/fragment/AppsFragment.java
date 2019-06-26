@@ -56,7 +56,6 @@ public class AppsFragment extends Fragment implements AdapterView.OnItemClickLis
         mIntentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         mIntentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         mIntentFilter.addDataScheme("package");
-
     }
 
     @Override

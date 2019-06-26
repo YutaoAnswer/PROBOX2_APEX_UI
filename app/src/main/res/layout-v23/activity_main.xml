@@ -56,7 +56,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/weather_text_size"
                 android:visibility="gone" />
-
+            
             <ImageView
                 android:id="@+id/title_weather_image"
                 android:layout_width="@dimen/weather_image_width"
@@ -95,7 +95,7 @@
                 android:id="@+id/main_content_tag1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/content_margin_left"
+                android:layout_marginLeft="@dimen/content_margin_left"
                 android:layout_marginTop="@dimen/tab_margin_top"
                 android:background="@drawable/tab_focus"
                 android:clickable="true"
@@ -170,7 +170,7 @@
             android:id="@+id/main_content_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
+        
     </RelativeLayout>
 
 
@@ -238,12 +238,12 @@
             android:id="@+id/main_foot_setting"
             android:layout_width="@dimen/footer_image_side"
             android:layout_height="@dimen/footer_image_side"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="@dimen/margin_between_footer_image"
             android:layout_marginBottom="@dimen/footer_margin_bottom"
             android:clickable="true"
             android:focusable="true"
+            android:layout_alignParentEnd="true"
             android:nextFocusLeft="@+id/main_foot_external_storage"
             android:nextFocusUp="@+id/fragment_home_gridview"
             android:src="@mipmap/settings_off" />
@@ -254,13 +254,13 @@
             android:layout_height="@dimen/footer_image_side"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:visibility="gone"
             android:layout_marginRight="@dimen/margin_between_footer_image"
             android:layout_marginBottom="@dimen/footer_margin_bottom"
             android:clickable="true"
             android:focusable="true"
             android:nextFocusUp="@+id/fragment_home_gridview"
-            android:src="@mipmap/switch_off"
-            android:visibility="gone" />
+            android:src="@mipmap/switch_off" />
 
     </RelativeLayout>
 

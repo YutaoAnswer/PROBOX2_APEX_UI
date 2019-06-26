@@ -1,5 +1,6 @@
 package com.netxeon.newprobox2.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,6 +12,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,6 +44,7 @@ import java.util.List;
  * 加号点进去逻辑
  */
 public class EditorActivity extends Activity {
+
     private PackageManager pm;
     private List<ResolveInfo> mPackages;
     private AppsSelectsAdapter mAdapter;
@@ -90,7 +93,7 @@ public class EditorActivity extends Activity {
         mIntentFilter.addDataScheme("package");
         pm = getPackageManager();
 
-        gridview = (GridView) findViewById(R.id.all_apps_gridview);
+        gridview = findViewById(R.id.all_apps_gridview);
         gridview.setNumColumns(columns);
         gridview.setOnItemClickListener(new ItemClickListener());
     }
@@ -122,8 +125,8 @@ public class EditorActivity extends Activity {
 
     // do not display the persistent packages
     private void fitterThePersistentPackages() {
-        List<ResolveInfo> persistentPackages = new ArrayList<ResolveInfo>();
-        List<Shortcut> persistentShortcut = new ArrayList<Shortcut>();
+        List<ResolveInfo> persistentPackages = new ArrayList<>();
+        List<Shortcut> persistentShortcut;
         persistentShortcut = mDB.queryAllPersistents();
         for (int i = 0; i < persistentShortcut.size(); i++) {
             for (ResolveInfo info : mPackages) {
@@ -136,8 +139,11 @@ public class EditorActivity extends Activity {
         mPackages.removeAll(persistentPackages);//去掉所有persistent字段为1的应用
     }
 
+    /**
+     * 初始化选择列表
+     */
     private void initSelections() {
-        List<Shortcut> selectedList = new ArrayList<Shortcut>();
+        List<Shortcut> selectedList;
         selectedList = mDB.queryByCategory(mCurrentCategory);
         for (Shortcut shortcut : selectedList) {
             for (ResolveInfo info : mPackages) {
@@ -180,7 +186,7 @@ public class EditorActivity extends Activity {
                 holder = new ViewHolder();
                 holder.text = (TextView) convertView.findViewById(R.id.item_apps_gridview_name);
                 holder.icon = (ImageView) convertView.findViewById(R.id.item_apps_gridview_image);
-                holder.selectView = (ImageView) convertView.findViewById(R.id.apps_icon_selected);
+                holder.selectView = (ImageView) convertView.findViewById(R.id.apps_icon_selected);//选中图标
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -237,6 +243,7 @@ public class EditorActivity extends Activity {
         }
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler dbHandler = new Handler() {
 
         @Override

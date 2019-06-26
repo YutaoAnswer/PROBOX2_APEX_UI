@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.netxeon.newprobox2"
-    android:sharedUserId="android.uid.system">
+    package="com.netxeon.newprobox2">
+
+    <!--android:sharedUserId="android.uid.system"-->
 
     <!-- Push service 运行需要的权限 -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
@@ -32,10 +33,17 @@
         android:icon="@mipmap/probox2_ui_icon"
         android:label="@string/app_name"
         android:theme="@style/changebgTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:targetApi="m">
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <activity
             android:name=".activity.MainActivity"
+            android:configChanges="locale|layoutDirection|keyboard"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

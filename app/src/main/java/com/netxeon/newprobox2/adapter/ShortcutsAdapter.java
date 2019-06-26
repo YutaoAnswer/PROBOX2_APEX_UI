@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.netxeon.newprobox2.R;
 import com.netxeon.newprobox2.bean.Shortcut;
+import com.netxeon.newprobox2.utils.Data;
 import com.netxeon.newprobox2.utils.Util;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.List;
 
 
 public class ShortcutsAdapter extends BaseAdapter {
+
     private LayoutInflater mInflater;
     private List<Shortcut> mShortcutList;
     private Context mContext;
@@ -76,7 +78,7 @@ public class ShortcutsAdapter extends BaseAdapter {
         } else {
             holder = (ShortcutHolder) convertView.getTag();
         }
-        if (mApps.get(position)==null) {
+        if (mApps.get(position) == null) {
             if (hasLabel) {
                 holder.label.setVisibility(View.GONE);
                 holder.add.setVisibility(View.VISIBLE);
@@ -121,7 +123,7 @@ public class ShortcutsAdapter extends BaseAdapter {
         for (Shortcut shortcut : list) {
             ResolveInfo resolveInfo = null;
             String componentStr = shortcut.getComponentName();
-            ComponentName componentName = null;
+            ComponentName componentName;
             for (ResolveInfo info : allApps) {
                 resolveInfo = null;
                 componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);

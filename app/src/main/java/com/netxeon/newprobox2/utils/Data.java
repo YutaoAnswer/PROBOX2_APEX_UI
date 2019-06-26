@@ -23,7 +23,7 @@ public class Data {
             R.mipmap.weather45, R.mipmap.weather46, R.mipmap.weather47};
 
 
-    public final static int getWeatherIcon(int code){
+    public final static int getWeatherIcon(int code) {
         return mWeatherIcons[code];
     }
 
@@ -36,5 +36,14 @@ public class Data {
     public static final String PHOTO = "photo";
     public static final String SOCIAL = "social";
     public static final String HOME = "home";
+
+    /*包名*/
+    public static final String google = "com.google.android.googlequicksearchbox";
+    public static final String gallery = "com.android.gallery3d";
+    public static final String netflix = "com.netflix.mediaclient";
+    public static final String youtube = "com.google.android.youtube";
+    public static final String music = "com.android.music";
+    public static final String chrome = "com.android.chrome";
+
 
 }

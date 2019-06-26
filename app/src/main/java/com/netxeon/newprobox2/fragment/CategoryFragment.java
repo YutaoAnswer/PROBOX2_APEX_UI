@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  分类页
+ * 分类页
  */
 public class CategoryFragment extends Fragment {
 
@@ -41,56 +42,7 @@ public class CategoryFragment extends Fragment {
     private GridView gridview;
     private int columns = 8;
     private boolean isPaused = false;
-
-    public void setCurrentCategory(String category) {
-        mCurrentCategory = category;
-    }
-
-    public String getmCurrentCategory() {
-        return mCurrentCategory;
-    }
-
-    public String getmCurrentCategoryString(){
-        String str = "";
-        switch (mCurrentCategory){
-            case Data.MOVIE :
-                str = getActivity().getString(R.string.icon_label_movie);
-                break;
-            case Data.FAVOURITES :
-                str = getActivity().getString(R.string.icon_label_favourites);
-                break;
-            case Data.MUSIC :
-                str = getActivity().getString(R.string.icon_label_music);
-                break;
-            case Data.STREAM :
-                str = getActivity().getString(R.string.icon_label_stream);
-                break;
-            case Data.INTERNET :
-                str = getActivity().getString(R.string.icon_label_internet);
-                break;
-            case Data.GAME :
-                str = getActivity().getString(R.string.icon_label_game);
-                break;
-            case Data.PHOTO :
-                str = getActivity().getString(R.string.icon_label_photo);
-                break;
-            case Data.SOCIAL :
-                str = getActivity().getString(R.string.icon_label_social);
-                break;
-        }
-        return str;
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (hidden) {
-        } else {
-            mAdapter = new ShortcutsAdapter(getActivity(), mShortcut, pm, true);
-            gridview.setAdapter(mAdapter);
-            getData();
-        }
-        super.onHiddenChanged(hidden);
-    }
+    private boolean isFirst = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,26 +61,6 @@ public class CategoryFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activityInit();
-    }
-
-    private void viewInit(View view) {
-        gridview = (GridView) view.findViewById(R.id.folder_id_gridview);
-    }
-
-    private void setListener() {
-        gridview.setOnItemClickListener(new ItemClickListener());
-    }
-
-    private void activityInit() {
-        L.d("zzy", "cate:" + mCurrentCategory);
-        mUpdateShortcutsReceiver = new PackageChangedReceiver();
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(Data.ACTION_UPDATE_SHORTCUTS);
-        pm = getActivity().getPackageManager();
-        gridview.setNumColumns(columns);
-        mAdapter = new ShortcutsAdapter(getActivity(), mShortcut, pm, true);
-        gridview.setAdapter(mAdapter);
-        getActivity().registerReceiver(mUpdateShortcutsReceiver, mIntentFilter);
     }
 
     @Override
@@ -153,6 +85,77 @@ public class CategoryFragment extends Fragment {
         super.onDestroy();
     }
 
+    public void setCurrentCategory(String category) {
+        mCurrentCategory = category;
+    }
+
+    public String getmCurrentCategory() {
+        return mCurrentCategory;
+    }
+
+    public String getmCurrentCategoryString() {
+        String str = "";
+        switch (mCurrentCategory) {
+            case Data.MOVIE:
+                str = getActivity().getString(R.string.icon_label_movie);
+                break;
+            case Data.FAVOURITES:
+                str = getActivity().getString(R.string.icon_label_favourites);
+                break;
+            case Data.MUSIC:
+                str = getActivity().getString(R.string.icon_label_music);
+                break;
+            case Data.STREAM:
+                str = getActivity().getString(R.string.icon_label_stream);
+                break;
+            case Data.INTERNET:
+                str = getActivity().getString(R.string.icon_label_internet);
+                break;
+            case Data.GAME:
+                str = getActivity().getString(R.string.icon_label_game);
+                break;
+            case Data.PHOTO:
+                str = getActivity().getString(R.string.icon_label_photo);
+                break;
+            case Data.SOCIAL:
+                str = getActivity().getString(R.string.icon_label_social);
+                break;
+        }
+        return str;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden) {
+
+        } else {
+            mAdapter = new ShortcutsAdapter(getActivity(), mShortcut, pm, true);
+            gridview.setAdapter(mAdapter);
+            getData();
+        }
+        super.onHiddenChanged(hidden);
+    }
+
+    private void viewInit(View view) {
+        gridview = (GridView) view.findViewById(R.id.folder_id_gridview);
+    }
+
+    private void setListener() {
+        gridview.setOnItemClickListener(new ItemClickListener());
+    }
+
+    private void activityInit() {
+        L.d("zzy", "cate:" + mCurrentCategory);
+        mUpdateShortcutsReceiver = new PackageChangedReceiver();
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(Data.ACTION_UPDATE_SHORTCUTS);
+        pm = getActivity().getPackageManager();
+        gridview.setNumColumns(columns);
+        mAdapter = new ShortcutsAdapter(getActivity(), mShortcut, pm, true);
+        gridview.setAdapter(mAdapter);
+        getActivity().registerReceiver(mUpdateShortcutsReceiver, mIntentFilter);
+    }
+
     private void getData() {
         if (mCurrentCategory == null) {
             return;
@@ -161,13 +164,39 @@ public class CategoryFragment extends Fragment {
             mShortcut = new ArrayList<>();
         }
         mShortcut = DBHelper.getInstance(getActivity()).queryByCategory(mCurrentCategory);
+        if (isFirst) {
+            switch (mCurrentCategory) {
+                case Data.MOVIE:
+                    Shortcut netflix = new Shortcut();
+                    netflix.setComponentName(Data.netflix);
+                    mShortcut.add(netflix);
+                    Shortcut youtube = new Shortcut();
+                    youtube.setComponentName(Data.youtube);
+                    mShortcut.add(youtube);
+                    isFirst = false;
+                    break;
+                case Data.MUSIC:
+                    
+                    isFirst = false;
+                    break;
+                case Data.INTERNET:
+
+                    isFirst = false;
+                    break;
+                case Data.PHOTO:
+
+                    isFirst = false;
+                    break;
+                default:
+                    break;
+            }
+        }
         Shortcut forAddItem = new Shortcut();
         forAddItem.setComponentName(ADDITIONAL);
         mShortcut.add(forAddItem);
         mAdapter.notifyDataSetChanged(mShortcut);
         gridview.requestFocus();
     }
-
 
     /**
      * handle the icon click event
@@ -189,7 +218,7 @@ public class CategoryFragment extends Fragment {
                     mainintent.setComponent(componentName);
                     startActivity(mainintent);
                 } catch (Exception e) {
- //                   L.e("error", "FolderActivity.ItemClickListener.onItemClick() startActivity failed: " + componentName);
+                    L.e("error", "FolderActivity.ItemClickListener.onItemClick() startActivity failed: " + componentName);
                 }
             }
 

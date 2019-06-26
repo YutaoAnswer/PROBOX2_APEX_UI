@@ -1,11 +1,16 @@
 package com.netxeon.newprobox2.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +33,8 @@ import com.netxeon.newprobox2.utils.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
+import static android.content.ContentValues.TAG;
+
 public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener,
         View.OnFocusChangeListener, AdapterView.OnItemSelectedListener {
 
@@ -51,19 +55,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     public RelativeLayout lastR = null;
     private boolean isPaused = false;
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (hidden) {
-            gridView.setFocusable(false);
-        } else {
-            gridView.setFocusable(true);
-//            getData();
-            if (lastR != null)
-                lastR.requestFocus();
-        }
-        super.onHiddenChanged(hidden);
-    }
+    private boolean isFirst = true;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +81,42 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activityInit();
+        sharedPreferences = getActivity().getSharedPreferences("isFirst", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean("isFirst", true).apply();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        if (isPaused) {
+            mAdapter.refreshApps();
+            isPaused = false;
+        }
+        getData();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        isPaused = true;
+        super.onPause();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden) {
+            gridView.setFocusable(false);
+        } else {
+            gridView.setFocusable(true);
+//            getData();
+            if (lastR != null)
+                lastR.requestFocus();
+        }
+        super.onHiddenChanged(hidden);
     }
 
     private void activityInit() {
@@ -95,7 +124,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
         mAdapter = new ShortcutsAdapter(getActivity(), mShortcut, pm, false);
         gridView.setAdapter(mAdapter);
         gridView.setNumColumns(columns);
-        //gridView.setFocusable(false);
+        //gridView.setFocusable(false);//不自动获取焦点
     }
 
     private void viewInit(View view) {
@@ -144,28 +173,44 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
         gridView.setOnFocusChangeListener(this);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        if (isPaused) {
-            mAdapter.refreshApps();
-            isPaused = false;
-        }
-        getData();
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        isPaused = true;
-        super.onPause();
-    }
-
     private void getData() {
+        List<ResolveInfo> allApps = Util.getAllApps(pm);
+        for (ResolveInfo app : allApps) {
+            Log.d(TAG, "getData: " + app.activityInfo.packageName + "----" + app.isDefault + "----" + app.activityInfo.name);
+        }
+        if (sharedPreferences.getBoolean("isFirst", true)) {
+            //模拟被选中事件，初始化第一次
+            // HomeFragment默认选中Google Search,Netflix,Youtube.
+            // Category MOVIE 默认选中　netflix youtube
+            // Category PHOTO 默认选中 gallery
+            // Category MUSIC 默认选中　music
+            // Category INTERNET 默认选中　chrome
+            for (int i = 0; i < allApps.size(); i++) {
+                ResolveInfo resolveInfo = allApps.get(i);
+                String packageName = resolveInfo.activityInfo.packageName;
+                if (packageName.equals(Data.google)) {
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.HOME);
+                }
+                if (packageName.equals(Data.netflix)) {
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.HOME);
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.MOVIE);
+                }
+                if (packageName.equals(Data.youtube)) {
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.HOME);
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.MOVIE);
+                }
+                if (packageName.equals(Data.gallery)) {
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.PHOTO);
+                }
+                if (packageName.equals(Data.music)) {
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.MUSIC);
+                }
+                if (packageName.equals(Data.chrome)) {
+                    Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.INTERNET);
+                }
+            }
+            sharedPreferences.edit().putBoolean("isFirst", false).apply();
+        }
         mShortcut = DBHelper.getInstance(getActivity()).queryByCategory(mCurrentCategory);
         Shortcut forAddItem = new Shortcut();
         forAddItem.setComponentName(ADDITIONAL);
@@ -190,7 +235,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                 mainintent.setComponent(componentName);
                 startActivity(mainintent);
             } catch (Exception e) {
-//                Log.e("error", "FolderActivity.ItemClickListener.onItemClick() startActivity failed: " + componentName);
+                Log.e("error", "FolderActivity.ItemClickListener.onItemClick() startActivity failed: " + componentName);
             }
         }
     }
@@ -389,7 +434,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                 case R.id.home_icon_files:
                     AnimUtil.setViewScaleDefault(v);
                     break;
-
                 case R.id.fragment_home_gridview:
                     if (mOldView != null) {
                         AnimUtil.setViewScaleDefault(mOldView);
@@ -412,6 +456,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
             }
         }
     };
+    @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
 //            Log.i("bo", "handle get msg");
@@ -436,7 +481,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
 //        Log.i("bo", "gridView.isFocused()=" + gridView.isFocused());
         if (view != null && gridView.hasFocus()) {
 //            Log.d("bo", view.toString() + " bringToFront");

@@ -61,6 +61,13 @@ public class Util {
         return pm.queryIntentActivities(i, 0);
     }
 
+
+    /**
+     * 数据库中插入该Ａｐｐ
+     * @param context 内容上下文
+     * @param componentName　组件名称
+     * @param category　Ａｐｐ类别
+     */
     public static void insertShortcut(Context context, String componentName, String category) {
         Shortcut shortcut = new Shortcut();
         shortcut.setCategory(category);
@@ -70,6 +77,12 @@ public class Util {
         db.insert(shortcut);
     }
 
+    /**
+     * 获取数据库的新版本号
+     * @param context 内容上下文
+     * @param metaKey　元键
+     * @return        数据库的新版本号
+     */
     public static int getNewDatabaseVersion(Context context, String metaKey) {
         Bundle metaData = null;
         int newVersion = 0;

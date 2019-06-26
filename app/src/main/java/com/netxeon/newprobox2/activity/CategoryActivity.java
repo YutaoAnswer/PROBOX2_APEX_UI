@@ -28,6 +28,7 @@ import java.util.List;
  * 分类页(dispose)
  */
 public class CategoryActivity extends Activity {
+
     private String mCurrentCategory;
     private PackageManager pm;
     private List<Shortcut> mShortcut;
@@ -91,7 +92,6 @@ public class CategoryActivity extends Activity {
      */
     private class ItemClickListener implements OnItemClickListener {
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
             ShortcutsAdapter.ShortcutHolder holder = (ShortcutsAdapter.ShortcutHolder) arg1.getTag();
             ComponentName componentName = holder.componentName;
             if (ADDITIONAL.equals(componentName.getPackageName())) {

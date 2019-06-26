@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
+
     private static final int DATABASE_VERSION = 2;
     private static final String TABLE_NAME = "shortcut";
     private static DBHelper mHelper;
@@ -51,7 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public List<Shortcut> queryByCategory(String category) {
-        List<Shortcut> shortcutList = new ArrayList<Shortcut>();
+        List<Shortcut> shortcutList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         String[] selectionArgs = {category};
         if (db == null) {

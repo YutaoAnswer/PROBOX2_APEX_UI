@@ -44,7 +44,6 @@ public class Shortcut {
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return packName;
     }
 }

@@ -179,7 +179,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         weather_image = (ImageView) findViewById(R.id.title_weather_image);
         systemDate = (TextView) findViewById(R.id.main_header_date);
         externalStorage = (ImageView) findViewById(R.id.main_foot_external_storage);
-        switcher = (ImageView) findViewById(R.id.main_foot_launcher_switcher);
+//        switcher = (ImageView) findViewById(R.id.main_foot_launcher_switcher);
         btStatus = (ImageView) findViewById(R.id.main_foot_bluetooth_states);
         setting = (ImageView) findViewById(R.id.main_foot_setting);
         timeHandle.post(timeRun);
@@ -198,13 +198,13 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         tab2.setOnClickListener(this);
         weather.setOnFocusChangeListener(this);
         externalStorage.setOnFocusChangeListener(this);
-        switcher.setOnFocusChangeListener(this);
+//        switcher.setOnFocusChangeListener(this);
         setting.setOnClickListener(this);
         weather.setOnClickListener(this);
-        switcher.setOnClickListener(this);
+//        switcher.setOnClickListener(this);
         setting.setOnFocusChangeListener(this);
         externalStorage.setOnClickListener(this);
-        switcher.setOnLongClickListener(this);
+//        switcher.setOnLongClickListener(this);
         //判断是否有外置存储
         volumes = Util.getPublicVolumes(this);
         if (volumes.size() > 0) {
@@ -380,13 +380,13 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     usbWindow.showOrDismissPopupWindow(externalStorage);
                 }
                 break;
-            case R.id.main_foot_launcher_switcher:
-                if (!SPUtils.contains(this, "default_launcher")) {
-                    ListPopupwindow launcherWindow = new ListPopupwindow(this, ListPopupwindow.RIGHTPOPUP);
-                    launcherWindow.showOrDismissPopupWindow(switcher);
-                } else {
-                    doStartApplicationWithPackageName((String) SPUtils.get(this, "default_launcher", getPackageName()));
-                }
+//            case R.id.main_foot_launcher_switcher:
+//                if (!SPUtils.contains(this, "default_launcher")) {
+//                    ListPopupwindow launcherWindow = new ListPopupwindow(this, ListPopupwindow.RIGHTPOPUP);
+//                    launcherWindow.showOrDismissPopupWindow(switcher);
+//                } else {
+//                    doStartApplicationWithPackageName((String) SPUtils.get(this, "default_launcher", getPackageName()));
+//                }
 
 //模拟系统home键
 //                Intent setlauncher = new Intent(Intent.ACTION_MAIN);
@@ -401,7 +401,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 //                ResolveInfo resolveInfo = getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
 //                String currentHomePackage = resolveInfo.activityInfo.packageName;
 //                getPackageManager().clearPackagePreferredActivities(currentHomePackage);
-                break;
+//                break;
             case R.id.main_foot_setting:
                 Intent settingIntent = new Intent();
                 ComponentName mComp = new ComponentName(getString(R.string.setting_pkg), getString(R.string.setting_main_activity));
@@ -441,14 +441,14 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 
     @Override
     public boolean onLongClick(View v) {
-        switch (v.getId()) {
-            case R.id.main_foot_launcher_switcher:
-                if (SPUtils.contains(mContext, "default_launcher")) {
-                    SPUtils.remove(mContext, "default_launcher");
-                    T.showLong(mContext, getString(R.string.launcher_default_cancel));
-                }
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.main_foot_launcher_switcher:
+//                if (SPUtils.contains(mContext, "default_launcher")) {
+//                    SPUtils.remove(mContext, "default_launcher");
+//                    T.showLong(mContext, getString(R.string.launcher_default_cancel));
+//                }
+//                break;
+//        }
         return false;
     }
 
@@ -488,7 +488,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                             weathrer_temperature.setText("");
                             weathrer_temperature.setVisibility(View.GONE);
                             weather_image.setImageBitmap(null);
-
                         }
                         Util.setString(getApplicationContext(), WeatherUtils.WEATHER_CITY, "empty");
                         Toast.makeText(getApplicationContext(), R.string.weather_edit_city_error, Toast.LENGTH_LONG).show();
@@ -496,7 +495,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     }
                     break;
                 }
-
             }
         }
     };
@@ -551,6 +549,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     if (appsFragment == null) {
                         appsFragment = new AppsFragment();
                     }
+
                     changeFragment(appsFragment);
                     if (lastTag.equals(tab1)) {
                         tab1.setBackgroundColor(getResources().getColor(R.color.none));
@@ -567,9 +566,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 case R.id.main_foot_setting:
                     setting.setImageResource(R.mipmap.settings_on);
                     break;
-                case R.id.main_foot_launcher_switcher:
-                    switcher.setImageResource(R.mipmap.switch_on);
-                    break;
+//                case R.id.main_foot_launcher_switcher:
+//                    switcher.setImageResource(R.mipmap.switch_on);
+//                    break;
             }
         } else {
             switch (v.getId()) {
@@ -586,9 +585,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 case R.id.main_foot_setting:
                     setting.setImageResource(R.mipmap.settings_off);
                     break;
-                case R.id.main_foot_launcher_switcher:
-                    switcher.setImageResource(R.mipmap.switch_off);
-                    break;
+//                case R.id.main_foot_launcher_switcher:
+//                    switcher.setImageResource(R.mipmap.switch_off);
+//                    break;
             }
         }
     }

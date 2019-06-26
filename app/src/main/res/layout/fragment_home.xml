@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/home_icons"
@@ -13,14 +13,13 @@
             android:id="@+id/home_icon_left_row1"
             android:layout_width="@dimen/home_short_icon_width"
             android:layout_height="@dimen/home_icon_height"
-            android:layout_marginLeft="@dimen/content_margin_left"
+            android:layout_marginStart="@dimen/content_margin_left"
             android:layout_marginTop="@dimen/fragment_margin_top"
             android:background="@drawable/left_icon_focus"
             android:clickable="true"
             android:focusable="true"
             android:nextFocusLeft="@+id/home_icon_left_row1"
-            android:nextFocusUp="@id/main_content_tag1"
-            >
+            android:nextFocusUp="@id/main_content_tag1">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -32,17 +31,17 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/icon_kodi"/>
+                    android:src="@mipmap/icon_kodi" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/home_margin_between_text_and_image"
-                    android:textColor="@color/white"
-                    android:text="@string/icon_label_kodi"
                     android:gravity="center"
-                    android:textSize="@dimen/home_text_size_small"/>
+                    android:text="@string/icon_label_kodi"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_small" />
 
 
             </LinearLayout>
@@ -54,7 +53,7 @@
             android:layout_width="@dimen/home_short_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row1"
-            android:layout_marginLeft="@dimen/content_margin_left"
+            android:layout_marginStart="@dimen/content_margin_left"
             android:layout_marginTop="@dimen/home_margin_row"
             android:background="@drawable/left_icon_focus"
             android:clickable="true"
@@ -72,18 +71,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/icon_googleplay"
-                    />
+                    android:src="@mipmap/icon_googleplay" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/home_margin_between_text_and_image"
-                    android:textColor="@color/white"
-                    android:text="@string/icon_label_google_play"
                     android:gravity="center"
-                    android:textSize="@dimen/home_text_size_small"/>
+                    android:text="@string/icon_label_google_play"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_small" />
 
 
             </LinearLayout>
@@ -95,13 +93,13 @@
             android:layout_width="@dimen/home_short_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row2"
-            android:layout_marginLeft="@dimen/content_margin_left"
+            android:layout_marginStart="@dimen/content_margin_left"
             android:layout_marginTop="@dimen/home_margin_row"
             android:background="@drawable/left_icon_focus"
             android:clickable="true"
             android:focusable="true"
-            android:nextFocusDown="@+id/fragment_home_gridview"
-            android:nextFocusLeft="@+id/home_icon_left_row3">
+            android:nextFocusLeft="@+id/home_icon_left_row3"
+            android:nextFocusDown="@+id/fragment_home_gridview">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -114,18 +112,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/icon_taskkiller"
-                    />
+                    android:src="@mipmap/icon_taskkiller" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/home_margin_between_text_and_image"
-                    android:textColor="@color/white"
-                    android:text="@string/icon_label_task_killer"
                     android:gravity="center"
-                    android:textSize="@dimen/home_text_size_small"/>
+                    android:text="@string/icon_label_task_killer"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_small" />
 
 
             </LinearLayout>
@@ -139,9 +136,9 @@
             android:id="@+id/home_icon_movie"
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/fragment_margin_top"
-            android:layout_toRightOf="@id/home_icon_left_row1"
+            android:layout_toEndOf="@id/home_icon_left_row1"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true"
@@ -157,7 +154,7 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_movies"/>
+                    android:src="@mipmap/icon_movies" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
@@ -165,8 +162,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/icon_label_movie"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/home_text_size_large"/>
-
+                    android:textSize="@dimen/home_text_size_large" />
 
             </LinearLayout>
 
@@ -176,9 +172,9 @@
             android:id="@+id/home_icon_favourites"
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/fragment_margin_top"
-            android:layout_toRightOf="@id/home_icon_movie"
+            android:layout_toEndOf="@id/home_icon_movie"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true"
@@ -194,15 +190,15 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_favorites"/>
+                    android:src="@mipmap/icon_favorites" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/white"
                     android:text="@string/icon_label_favourites"
-                    android:textSize="@dimen/home_text_size_large"/>
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_large" />
 
 
             </LinearLayout>
@@ -213,9 +209,9 @@
             android:id="@+id/home_icon_music"
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/fragment_margin_top"
-            android:layout_toRightOf="@id/home_icon_favourites"
+            android:layout_toEndOf="@id/home_icon_favourites"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true"
@@ -232,16 +228,15 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_music"/>
+                    android:src="@mipmap/icon_music" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
                     android:text="@string/icon_label_music"
-                    android:textSize="@dimen/home_text_size_large"/>
-
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_large" />
 
             </LinearLayout>
 
@@ -253,9 +248,9 @@
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row1"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/home_margin_row"
-            android:layout_toRightOf="@id/home_icon_left_row2"
+            android:layout_toEndOf="@id/home_icon_left_row2"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true">
@@ -270,7 +265,7 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_stream"/>
+                    android:src="@mipmap/icon_stream" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
@@ -278,8 +273,7 @@
                     android:layout_gravity="center_vertical|left"
                     android:text="@string/icon_label_stream"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/home_text_size_large"/>
-
+                    android:textSize="@dimen/home_text_size_large" />
 
             </LinearLayout>
 
@@ -290,9 +284,9 @@
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row1"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/home_margin_row"
-            android:layout_toRightOf="@id/home_icon_stream"
+            android:layout_toEndOf="@id/home_icon_stream"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true">
@@ -307,16 +301,15 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_internetimg"/>
+                    android:src="@mipmap/icon_internetimg" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_vertical|left"
                     android:text="@string/icon_label_internet"
-                    android:textSize="@dimen/home_text_size_large"/>
-
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_large" />
 
             </LinearLayout>
 
@@ -327,9 +320,9 @@
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row1"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/home_margin_row"
-            android:layout_toRightOf="@id/home_icon_internet"
+            android:layout_toEndOf="@id/home_icon_internet"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true"
@@ -345,16 +338,15 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_game"/>
+                    android:src="@mipmap/icon_game" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_vertical|left"
                     android:text="@string/icon_label_game"
-                    android:textSize="@dimen/home_text_size_large"/>
-
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_large" />
 
             </LinearLayout>
 
@@ -367,9 +359,9 @@
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row2"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/home_margin_row"
-            android:layout_toRightOf="@id/home_icon_left_row3"
+            android:layout_toEndOf="@id/home_icon_left_row3"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true"
@@ -385,7 +377,7 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_pthoto"/>
+                    android:src="@mipmap/icon_pthoto" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
@@ -393,8 +385,7 @@
                     android:layout_gravity="center_vertical|left"
                     android:text="@string/icon_label_photo"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/home_text_size_large"/>
-
+                    android:textSize="@dimen/home_text_size_large" />
 
             </LinearLayout>
 
@@ -405,9 +396,9 @@
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row2"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/home_margin_row"
-            android:layout_toRightOf="@id/home_icon_photo"
+            android:layout_toEndOf="@id/home_icon_photo"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true"
@@ -423,15 +414,15 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_social"/>
+                    android:src="@mipmap/icon_social" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_gravity="center_vertical|left"
                     android:text="@string/icon_label_social"
-                    android:textSize="@dimen/home_text_size_large"/>
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_large" />
 
 
             </LinearLayout>
@@ -443,14 +434,14 @@
             android:layout_width="@dimen/home_long_icon_width"
             android:layout_height="@dimen/home_icon_height"
             android:layout_below="@id/home_icon_left_row2"
-            android:layout_marginLeft="@dimen/home_margin_columns"
+            android:layout_marginStart="@dimen/home_margin_columns"
             android:layout_marginTop="@dimen/home_margin_row"
-            android:layout_toRightOf="@id/home_icon_social"
+            android:layout_toEndOf="@id/home_icon_social"
             android:background="@drawable/right_icon_focus"
             android:clickable="true"
             android:focusable="true"
-            android:nextFocusDown="@+id/fragment_home_gridview"
-            android:nextFocusRight="@id/main_content_tag2">
+            android:nextFocusRight="@id/main_content_tag2"
+            android:nextFocusDown="@+id/fragment_home_gridview">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -462,15 +453,15 @@
                     android:layout_width="@dimen/home_icon_image_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/icon_file"/>
+                    android:src="@mipmap/icon_file" />
 
                 <TextView
                     android:layout_width="@dimen/home_icon_text_width_long"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:textColor="@color/white"
                     android:text="@string/icon_label_files"
-                    android:textSize="@dimen/home_text_size_large"/>
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/home_text_size_large" />
 
 
             </LinearLayout>
@@ -482,15 +473,15 @@
             android:layout_width="940dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/home_icon_left_row3"
+            android:layout_marginStart="150dp"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="150dp"
-            android:horizontalSpacing="10dp"
             android:drawSelectorOnTop="true"
+            android:horizontalSpacing="10dp"
             android:listSelector="@drawable/gridview_item_focus"
-            android:nextFocusDown="@id/main_foot_external_storage"
             android:nextFocusLeft="@id/fragment_home_gridview"
             android:nextFocusRight="@id/fragment_home_gridview"
-            android:verticalSpacing="10dp"/>
+            android:nextFocusDown="@id/main_foot_external_storage"
+            android:verticalSpacing="10dp" />
 
     </RelativeLayout>
 
