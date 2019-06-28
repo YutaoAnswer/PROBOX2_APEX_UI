@@ -16,7 +16,7 @@
     <dimen name="weather_image_height">35dp</dimen>
     <dimen name="margin_bottom_weather">5dp</dimen>
     <!-- date -->
-    <dimen name="margin_between_weather_and_date">35dp</dimen>
+    <dimen name="margin_between_weather_and_date">80dp</dimen>
     <dimen name="date_text_size">40sp</dimen>
     <!-- Content -->
     <dimen name="content_margin_left">150dp</dimen>

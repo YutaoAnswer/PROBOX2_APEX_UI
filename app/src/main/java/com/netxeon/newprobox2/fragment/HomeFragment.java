@@ -55,13 +55,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     public RelativeLayout lastR = null;
     private boolean isPaused = false;
-    private boolean isFirst = true;
     private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mShortcut = new ArrayList<>();
+        sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -81,8 +81,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activityInit();
-        sharedPreferences = getActivity().getSharedPreferences("isFirst", Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean("isFirst", true).apply();
     }
 
     @Override
@@ -209,7 +207,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                     Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.INTERNET);
                 }
             }
-            sharedPreferences.edit().putBoolean("isFirst", false).apply();
+            sharedPreferences.edit().putBoolean("isFirst", false).apply();//修改为false,第一次默认加载选项，之后不加载
         }
         mShortcut = DBHelper.getInstance(getActivity()).queryByCategory(mCurrentCategory);
         Shortcut forAddItem = new Shortcut();

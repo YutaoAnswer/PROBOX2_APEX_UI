@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -42,19 +43,23 @@ import com.netxeon.newprobox2.broadcast.UsbChangeReceiver;
 import com.netxeon.newprobox2.fragment.AppsFragment;
 import com.netxeon.newprobox2.fragment.CategoryFragment;
 import com.netxeon.newprobox2.fragment.HomeFragment;
+import com.netxeon.newprobox2.newyahooweather.NewYahooWeather;
 import com.netxeon.newprobox2.utils.AnimUtil;
 import com.netxeon.newprobox2.utils.Data;
 import com.netxeon.newprobox2.utils.DateUtil;
 import com.netxeon.newprobox2.utils.ListPopupwindow;
-import com.netxeon.newprobox2.utils.SPUtils;
-import com.netxeon.newprobox2.utils.T;
 import com.netxeon.newprobox2.utils.Util;
 import com.netxeon.newprobox2.weather.WeatherUtils;
+import com.netxeon.newprobox2.weather.WeatherUtilsV2;
 
 import java.util.List;
 import java.util.Map;
 
+
 import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
+
+import static android.content.ContentValues.TAG;
+
 
 public class MainActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener
         , View.OnLongClickListener {
@@ -66,7 +71,11 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private TextView weather_city;
     private TextView weathrer_temperature;
     private ImageView weather_image;
-    private static int mWeatherCode = 3200;
+    private String mWeatherInfoStr;
+    private String mWeatherOtherStr1;
+    private String mWeatherOtherStr2;
+    private static String mCityStr;
+    private static long mWeatherCode = 3200;
     private TextView systemDate;
     private ImageView externalStorage, switcher, btStatus, setting;
 
@@ -88,14 +97,86 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private TextView lastTag;
     private Map<String, String> volumes;
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
+
+    @SuppressLint("HandlerLeak")
+    public Handler weatherHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            weatherUtilsV2.setAccessing(false);
+            Log.d(TAG, "handleMessage: " + msg.what);
+            switch (msg.what) {
+                case WeatherUtilsV2.MSG_WEATHER_NO_CITY:
+                    break;
+                case WeatherUtilsV2.MSG_WEATHER_FAILED:
+                case WeatherUtilsV2.MSG_WEATHER_PARSE_CITY_FAILED:
+                case WeatherUtilsV2.MSG_WEATHER_NETWORK_DISCONNECTED:
+                    weatherUtilsV2.accessFailed();
+                    break;
+                case WeatherUtilsV2.MSG_WEATHER_OK:
+                case WeatherUtilsV2.MSG_WEATHER_OK_NEW: {
+//                    WeatherInfo weatherInfo = (WeatherInfo) msg.obj;
+//                    if (weatherInfo != null) {
+///*mWeatherBitmap = weatherInfo.getCurrentConditionIcon();
+//mWeatherStr = "Weather:" + weatherInfo.getCurrentText() + " " + "Temperature:" + weatherInfo.getCurrentTempC() + "ºC " + "( "
+//+ weatherInfo.getCurrentTempF() + "ºF ) " + "Wind chill:" + weatherInfo.getWindChill() + "ºF " + "Wind direction:"
+//+ weatherInfo.getWindDirection() + " " + "Wind speed:" + weatherInfo.getWindSpeed() + " " + "Humidity:"
+//+ weatherInfo.getAtmosphereHumidity() + " " + "Pressure: " + weatherInfo.getAtmospherePressure() + " " + "Visibility: "
+//+ weatherInfo.getAtmosphereVisibility();*/
+//                        mWeatherInfoStr = weatherInfo.getCurrentText();
+//                        mWeatherOtherStr1 = (weatherInfo.getCurrentTemp() - 32) * 5 / 9 + "ºC " + weatherInfo.getCurrentTemp() + "ºF";
+////mWeatherOtherStr1 = weatherInfo.getCurrentTempC() + "ºC " + " (" + weatherInfo.getCurrentTempF() + "ºF )";
+////mWeatherOtherStr1 = "Humidity: "	+ weatherInfo.getAtmosphereHumidity() + " Pressure: " + weatherInfo.getAtmospherePressure();
+//                        mWeatherOtherStr2 = "Visibility: " + weatherInfo.getAtmosphereVisibility() + " Wind speed: " + weatherInfo.getWindSpeed();
+//                        mCityStr = weatherInfo.getLocationCity();
+//                        mWeatherCode = weatherInfo.getCurrentCode();
+//                        weatherUtilsV2.saveCityName();
+//                        updateWeatherViews();
+//                    } else {
+//                        Toast.makeText(MainActivity.this, R.string.weather_edit_city_error, Toast.LENGTH_LONG).show();
+//                        Logger.log(Logger.TAG_WEATHER, "MainActivity.UpdateWeatherHandler get weather info error !");
+//                    }
+                    NewYahooWeather newYahooWeather = (NewYahooWeather) msg.obj;
+//                    WeatherInfo weatherInfo = (WeatherInfo) msg.obj;
+                    Log.d(TAG, "handleMessage: 访问成功");
+
+                    if (weather_city != null && weather_image != null && newYahooWeather != null) {
+                        mWeatherCode = newYahooWeather.getCode();
+                        int temp = (int) ((newYahooWeather.getTemp() - 32) / 1.8);
+                        weathrer_temperature.setText(temp + "ºC");
+                        weather_city.setText(newYahooWeather.getCity());
+                        weathrer_temperature.setVisibility(View.VISIBLE);
+                        if (mWeatherCode >= 0 && mWeatherCode <= 47) {
+                            weather_image.setImageResource(Data.getWeatherIcon(((int) mWeatherCode)));//设置通过weathercode设置已经在本地的天气图片
+                        } else {
+                            weather_image.setImageResource(R.mipmap.weather3200);
+                        }
+
+                        Util.setString(getApplicationContext(), WeatherUtils.WEATHER_CITY, newYahooWeather.getCity());
+//                        L.i("MainActivity.UpdateWeatherHandler display weather info !");
+                    } else {
+                        if (weather_city != null && weather_image != null) {
+                            weather_city.setText(R.string.weather_no_city);
+                            weathrer_temperature.setText("");
+                            weathrer_temperature.setVisibility(View.GONE);
+                            weather_image.setImageBitmap(null);
+                        }
+                        Util.setString(getApplicationContext(), WeatherUtils.WEATHER_CITY, "empty");
+                        Toast.makeText(getApplicationContext(), R.string.weather_edit_city_error, Toast.LENGTH_LONG).show();
+//                        L.i("MainActivity.UpdateWeatherHandler weather views are null !");
+                    }
+                }
+                break;
+            }
+        }
+    };
+
+    private WeatherUtilsV2 weatherUtilsV2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        weatherUtilsV2 = new WeatherUtilsV2(MainActivity.this, weatherHandler);
         //db
         int lastDatabaseVersion = Util.getInt(this, Data.PRE_DB_VERSION);//获取上一版本数据库如果第一次装是0
         final int newDatabaseVersion = Util.getNewDatabaseVersion(this, Data.PRE_DB_VERSION);//获取xml里设置的数据库版本
@@ -134,6 +215,18 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         unregisterReceiver(mNetworkChangedReceiver);
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mUsbChangeReceiver);
+        unregisterReceiver(mBluetoothChangeReceiver);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     private void initNetworkDisplay() {
         mFilter = new IntentFilter();
         mFilter.addAction(Intent.ACTION_TIME_CHANGED);//当用户更改了设备上的时间时发送
@@ -144,12 +237,11 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         mFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);//标识Wi-Fi硬件状态改变，可能在enabling、enabled、disabling、disabled和unknown之间改变
         mFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
         //监听这个intent可以使应用程序监控当前Wi-Fi连接的信号强度。包含一个额外键值EXTRA_NEW_RSSI，包含了当前信号强度。使用这个信号强度，需要使用静态函数calculateSignalLevel将这个值按指定的缩放转换为整型值。
-        mNetworkChangedReceiver = new NetworkChangedReceiver(this, mUpdateWeatherHandler);// 监听网络状态改变，顺便初始化天气定时更新
+        mNetworkChangedReceiver = new NetworkChangedReceiver(this, weatherHandler, weatherUtilsV2);// 监听网络状态改变，顺便初始化天气定时更新
         registerReceiver(mNetworkChangedReceiver, mFilter);
     }
 
     private void initUsbDispaly() {
-
         //注册外置存储广播
         IntentFilter Filter = new IntentFilter();
         Filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
@@ -159,15 +251,12 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         registerReceiver(mUsbChangeReceiver, Filter);
     }
 
-
     private void initbtDispaly() {
-
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         mBluetoothChangeReceiver = new BluetoothChangeReceiver(btStatus);
         registerReceiver(mBluetoothChangeReceiver, filter);
     }
-
 
     private void initView() {
         tab1 = (TextView) findViewById(R.id.main_content_tag1);
@@ -250,6 +339,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         return categoryFragment;
     }
 
+    @SuppressLint("ResourceType")
     public void changeFragment(Fragment fragment) {
         if (fragment == mCurrentFragment)//如果是当前不做变化
             return;
@@ -284,7 +374,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     public boolean dispatchKeyEvent(KeyEvent event) {
         Log.i("bo", "dispatchKeyEvent" + "");
         return super.dispatchKeyEvent(event);
-
     }
 
     /**
@@ -334,10 +423,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
 
         if (keyCode == KeyEvent.KEYCODE_HOME) {
-
             changeFragment(homeFragment);
             return true;
-    }
+        }
 
         return super.onKeyDown(keyCode, event);
     }
@@ -457,7 +545,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private Handler mUpdateWeatherHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
 //            L.i("MainActivity.UpdateWeatherHandler msg.what : " + msg.what);
             switch (msg.what) {
                 case WeatherUtils.MSG_WEATHER_NO_CITY: {
@@ -475,7 +562,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                         weather_city.setText(weatherInfo.getLocationCity());
                         weathrer_temperature.setVisibility(View.VISIBLE);
                         if (mWeatherCode >= 0 && mWeatherCode <= 47) {
-                            weather_image.setImageResource(Data.getWeatherIcon(mWeatherCode));//设置通过weathercode设置已经在本地的天气图片
+                            weather_image.setImageResource(Data.getWeatherIcon((int) mWeatherCode));//设置通过weathercode设置已经在本地的天气图片
                         } else {
                             weather_image.setImageResource(R.mipmap.weather3200);
                         }
@@ -508,8 +595,11 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 String _location = editor.getText().toString();
                 if (!TextUtils.isEmpty(_location)) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editor.getWindowToken(), 0);
-                    WeatherUtils.updateWeather(MainActivity.this, mUpdateWeatherHandler, _location);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(editor.getWindowToken(), 0);
+                    }
+//                    WeatherUtils.updateWeather(MainActivity.this, mUpdateWeatherHandler, _location);
+                    weatherUtilsV2.changeCityName(_location);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.weather_edit_city_dialog_not_empty, Toast.LENGTH_LONG).show();
                 }
@@ -524,7 +614,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             systemDate.setText(DateUtil.getTime());
             timeHandle.postDelayed(this, 5000);
         }
-
     };
 
 
@@ -590,14 +679,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 //                    break;
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        unregisterReceiver(mUsbChangeReceiver);
-        unregisterReceiver(mBluetoothChangeReceiver);
-        super.onDestroy();
     }
 
     public void doStartApplicationWithPackageName(String packagename) {
@@ -667,4 +748,5 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             }
         }
     }
+
 }

@@ -12,8 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import zh.wang.android.apis.yweathergetter4a.YahooWeather;
-import zh.wang.android.apis.yweathergetter4a.YahooWeather.SEARCH_MODE;
+
 
 public class WeatherUtils {
 
@@ -63,17 +62,17 @@ public class WeatherUtils {
 	    return state;
 	}
 	
-	public static void updateWeather(Activity activity, Handler weatherHandler, String city){
-		YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000, false);
-		L.d("stored city name " + city);
-		if (!city.equals("empty")) {
-			mYahooWeather.setNeedDownloadIcons(true);
-			mYahooWeather.setSearchMode(SEARCH_MODE.PLACE_NAME);
-			mYahooWeather.queryYahooWeatherByPlaceName(activity,
-					city, new WeatherUpdater(weatherHandler));
-		} else {
-			weatherHandler.sendEmptyMessage(MSG_WEATHER_NO_CITY);
-		}
-	}
+//	public static void updateWeather(Activity activity, Handler weatherHandler, String city){
+//		YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000, false);
+//		L.d("stored city name " + city);
+//		if (!city.equals("empty")) {
+//			mYahooWeather.setNeedDownloadIcons(true);
+//			mYahooWeather.setSearchMode(SEARCH_MODE.PLACE_NAME);
+//			mYahooWeather.queryYahooWeatherByPlaceName(activity,
+//					city, new WeatherUpdater(weatherHandler));
+//		} else {
+//			weatherHandler.sendEmptyMessage(MSG_WEATHER_NO_CITY);
+//		}
+//	}
 	
 }

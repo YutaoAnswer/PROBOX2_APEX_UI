@@ -83,7 +83,6 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/home_text_size_small" />
 
-
             </LinearLayout>
 
         </RelativeLayout>
@@ -199,7 +198,6 @@
                     android:text="@string/icon_label_favourites"
                     android:textColor="@color/white"
                     android:textSize="@dimen/home_text_size_large" />
-
 
             </LinearLayout>
 

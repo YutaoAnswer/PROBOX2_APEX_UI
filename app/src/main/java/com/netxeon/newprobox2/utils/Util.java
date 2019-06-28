@@ -64,9 +64,10 @@ public class Util {
 
     /**
      * 数据库中插入该Ａｐｐ
-     * @param context 内容上下文
-     * @param componentName　组件名称
-     * @param category　Ａｐｐ类别
+     *
+     * @param context       内容上下文
+     * @param componentName 　组件名称
+     * @param category      　Ａｐｐ类别
      */
     public static void insertShortcut(Context context, String componentName, String category) {
         Shortcut shortcut = new Shortcut();
@@ -79,9 +80,10 @@ public class Util {
 
     /**
      * 获取数据库的新版本号
+     *
      * @param context 内容上下文
-     * @param metaKey　元键
-     * @return        数据库的新版本号
+     * @param metaKey 　元键
+     * @return 数据库的新版本号
      */
     public static int getNewDatabaseVersion(Context context, String metaKey) {
         Bundle metaData = null;
@@ -160,7 +162,7 @@ public class Util {
         //       L.i("-------Util.copyWallpaperFromAssert() completed");
     }
 
-   /* -------------------------sp操作------------------------------*/
+    /* -------------------------sp操作------------------------------*/
 
     public static String getString(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences(Util.PRE_FILE, Context.MODE_PRIVATE);
@@ -201,9 +203,7 @@ public class Util {
         return mApps;
     }
 
-
     public static Map<String, String> getPublicVolumes(Context context) {
-
         StorageManager sm = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         Map<String, String> map = new HashMap<String, String>();
         try {

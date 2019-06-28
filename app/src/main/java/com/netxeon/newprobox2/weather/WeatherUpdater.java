@@ -9,6 +9,7 @@ import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
 import zh.wang.android.apis.yweathergetter4a.YahooWeatherExceptionListener;
 import zh.wang.android.apis.yweathergetter4a.YahooWeatherInfoListener;
 
+
 public class WeatherUpdater implements YahooWeatherInfoListener,
 		YahooWeatherExceptionListener {
 	private Handler mWeatherHandler;

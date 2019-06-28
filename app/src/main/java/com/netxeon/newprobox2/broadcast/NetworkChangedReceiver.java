@@ -13,21 +13,25 @@ import android.widget.ImageView;
 import com.netxeon.newprobox2.R;
 import com.netxeon.newprobox2.utils.Util;
 import com.netxeon.newprobox2.weather.WeatherUtils;
+import com.netxeon.newprobox2.weather.WeatherUtilsV2;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class NetworkChangedReceiver extends BroadcastReceiver {
+
     private Activity mContext;
     private Handler mUpdateHandler;
+    private WeatherUtilsV2 mWeatherUtilsV2;
     // update weather info per 3 hours
     private static final long UPDATE_WEATHER_PER_TIME = 1000 * 60 * 60 * 3;
     private long mLastWeatherUpdate = 0;
 
-    public NetworkChangedReceiver(Activity context, Handler updateHandler) {
+    public NetworkChangedReceiver(Activity context, Handler updateHandler, WeatherUtilsV2 weatherUtilsV2) {
         mContext = context;
         mUpdateHandler = updateHandler;
+        mWeatherUtilsV2 = weatherUtilsV2;
     }
 
     @Override
@@ -36,9 +40,7 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
             boolean updateWeather = intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION);//网络状态改变
             initNetwork(updateWeather);
         }
-
         //Util.updateDateDisplay(mContext);
-
     }
 
     /*
@@ -74,7 +76,7 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
                 ethernat.setImageResource(available ? R.mipmap.ethernet_on : R.mipmap.ethernet_off);
                 wifi_image.setImageResource(R.mipmap.icon_wifi_0);
             } else {
-                WifiManager manager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+                WifiManager manager = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 int level = WifiManager.calculateSignalLevel(manager.getConnectionInfo().getRssi(), 5);
     //            L.i(level+"level");
                 wifi_image.setImageResource(R.drawable.wifi_signl);
@@ -107,7 +109,8 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                WeatherUtils.updateWeather(mContext, mUpdateHandler, Util.getString(mContext, WeatherUtils.WEATHER_CITY));
+//                WeatherUtilsV2.updateWeather(mContext, mUpdateHandler, Util.getString(mContext, WeatherUtils.WEATHER_CITY));
+                mWeatherUtilsV2.updateWeatherByGPS();
  //               L.d("MainActivity.initWeather() start Timer weatherUpdater. count:" + count);
             }
         };
