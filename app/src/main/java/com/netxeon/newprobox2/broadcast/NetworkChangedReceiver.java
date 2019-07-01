@@ -18,7 +18,6 @@ import com.netxeon.newprobox2.weather.WeatherUtilsV2;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class NetworkChangedReceiver extends BroadcastReceiver {
 
     private Activity mContext;

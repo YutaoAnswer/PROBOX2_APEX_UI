@@ -138,8 +138,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 //                    }
                     NewYahooWeather newYahooWeather = (NewYahooWeather) msg.obj;
 //                    WeatherInfo weatherInfo = (WeatherInfo) msg.obj;
-                    Log.d(TAG, "handleMessage: 访问成功");
-
                     if (weather_city != null && weather_image != null && newYahooWeather != null) {
                         mWeatherCode = newYahooWeather.getCode();
                         int temp = (int) ((newYahooWeather.getTemp() - 32) / 1.8);

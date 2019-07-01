@@ -12,7 +12,6 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -93,7 +92,7 @@ public class EditorActivity extends Activity {
         mIntentFilter.addDataScheme("package");
         pm = getPackageManager();
 
-        gridview = findViewById(R.id.all_apps_gridview);
+        gridview = (GridView) findViewById(R.id.all_apps_gridview);
         gridview.setNumColumns(columns);
         gridview.setOnItemClickListener(new ItemClickListener());
     }
