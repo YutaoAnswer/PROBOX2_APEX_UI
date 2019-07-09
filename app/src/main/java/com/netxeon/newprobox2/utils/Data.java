@@ -45,5 +45,6 @@ public class Data {
     public static final String music = "com.android.music";
     public static final String chrome = "com.android.chrome";
 
+    public static final String mClassName = "com.google.android.googlequicksearchbox.SearchActivity";
 
 }

@@ -1,5 +1,6 @@
 package com.netxeon.newprobox2.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
@@ -101,6 +102,7 @@ public class MemoryCleaner {
     }
 
 
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -156,9 +158,7 @@ public class MemoryCleaner {
                 handler.sendEmptyMessage(cleanfinish);
             }
         }.start();
-
     }
-
 
     /**
      * 向上动画
@@ -215,7 +215,7 @@ public class MemoryCleaner {
             BufferedReader localBufferedReader = new BufferedReader(localFileReader, 8192);
             str2 = localBufferedReader.readLine();
             arrayOfString = str2.split("\\s+");
-            initial_memory = Integer.valueOf(arrayOfString[1]).intValue() * 1024;
+            initial_memory = Integer.valueOf(arrayOfString[1]) * 1024;
             localBufferedReader.close();
 
         } catch (IOException e) {
@@ -224,7 +224,7 @@ public class MemoryCleaner {
     }
 
     private void initViews() {
-        mySinkingView = (MySinkingView) mActivity.findViewById(R.id.sinking);
+        mySinkingView = mActivity.findViewById(R.id.sinking);
 
     }
 

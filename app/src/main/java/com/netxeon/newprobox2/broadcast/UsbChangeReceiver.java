@@ -26,7 +26,7 @@ public class UsbChangeReceiver extends BroadcastReceiver {
         if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
             imageview.setImageResource(R.mipmap.usb_on);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                imageview.setClickable(true);
+                imageview.setClickable(true);
                 imageview.setFocusable(true);
             }
 

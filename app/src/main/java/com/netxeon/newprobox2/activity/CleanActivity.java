@@ -15,7 +15,6 @@ public class CleanActivity extends Activity  {
 
     private int percent = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

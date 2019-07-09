@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -77,7 +76,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private static String mCityStr;
     private static long mWeatherCode = 3200;
     private TextView systemDate;
-    private ImageView externalStorage, switcher, btStatus, setting;
+    private ImageView externalStorage, switcher, bluetoothStatus, setting, wifiStates;//底部图标
 
     public HomeFragment homeFragment;
     public AppsFragment appsFragment;
@@ -97,6 +96,10 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private TextView lastTag;
     private Map<String, String> volumes;
 
+    private HomeWatcherReceiver mHomeKeyReceiver = new HomeWatcherReceiver();
+    private WeatherUtilsV2 weatherUtilsV2;
+    private KeyReceiver keyReceiver = new KeyReceiver();
+    private IntentFilter keyIntentFilter;
 
     @SuppressLint("HandlerLeak")
     public Handler weatherHandler = new Handler() {
@@ -137,6 +140,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 //                        Logger.log(Logger.TAG_WEATHER, "MainActivity.UpdateWeatherHandler get weather info error !");
 //                    }
                     NewYahooWeather newYahooWeather = (NewYahooWeather) msg.obj;
+                    Log.d(TAG, "handleMessage: 设置了");
 //                    WeatherInfo weatherInfo = (WeatherInfo) msg.obj;
                     if (weather_city != null && weather_image != null && newYahooWeather != null) {
                         mWeatherCode = newYahooWeather.getCode();
@@ -169,14 +173,12 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
     };
 
-    private WeatherUtilsV2 weatherUtilsV2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         weatherUtilsV2 = new WeatherUtilsV2(MainActivity.this, weatherHandler);
         //db
-        int lastDatabaseVersion = Util.getInt(this, Data.PRE_DB_VERSION);//获取上一版本数据库如果第一次装是0
+        int lastDatabaseVersion = Util.getInt(this, Data.PRE_DB_VERSION);//获取上一版本数据库如果第一次则是0
         final int newDatabaseVersion = Util.getNewDatabaseVersion(this, Data.PRE_DB_VERSION);//获取xml里设置的数据库版本
         if (lastDatabaseVersion < newDatabaseVersion) {
             new Thread() {
@@ -191,8 +193,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         setContentView(R.layout.activity_main);
         initView();
         initNetworkDisplay();
-        initUsbDispaly();
-        initbtDispaly();
+        initUsbDisplay();
+        initBluetoothDisplay();
         setListener();
         setDefaultFragment(savedInstanceState != null);
     }
@@ -201,14 +203,15 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     protected void onResume() {
         super.onResume();
 //        lastTag.requestFocus();
+        registerKeyReceiver(this);
         registerHomeKeyReceiver(this);
-
         registerReceiver(mNetworkChangedReceiver, mFilter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterKeyReceiver(this);
         unregisterHomeKeyReceiver(this);
         unregisterReceiver(mNetworkChangedReceiver);
     }
@@ -239,7 +242,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         registerReceiver(mNetworkChangedReceiver, mFilter);
     }
 
-    private void initUsbDispaly() {
+    private void initUsbDisplay() {
         //注册外置存储广播
         IntentFilter Filter = new IntentFilter();
         Filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
@@ -249,31 +252,34 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         registerReceiver(mUsbChangeReceiver, Filter);
     }
 
-    private void initbtDispaly() {
+    private void initBluetoothDisplay() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        mBluetoothChangeReceiver = new BluetoothChangeReceiver(btStatus);
+        mBluetoothChangeReceiver = new BluetoothChangeReceiver(bluetoothStatus);
         registerReceiver(mBluetoothChangeReceiver, filter);
     }
 
     private void initView() {
-        tab1 = (TextView) findViewById(R.id.main_content_tag1);
-        tab2 = (TextView) findViewById(R.id.main_content_tag2);
-        tab3 = (TextView) findViewById(R.id.main_content_tag_category);
-        weather = (LinearLayout) findViewById(R.id.main_header_weather);
-        weathrer_temperature = (TextView) findViewById(R.id.title_weather_temperature);
-        weather_city = (TextView) findViewById(R.id.title_weather_city);
-        weather_image = (ImageView) findViewById(R.id.title_weather_image);
-        systemDate = (TextView) findViewById(R.id.main_header_date);
-        externalStorage = (ImageView) findViewById(R.id.main_foot_external_storage);
+        keyIntentFilter = new IntentFilter(getResources().getString(R.string.action_showapp));
+        tab1 = findViewById(R.id.main_content_tag1);
+        tab2 = findViewById(R.id.main_content_tag2);
+        tab3 = findViewById(R.id.main_content_tag_category);
+        weather = findViewById(R.id.main_header_weather);
+        weathrer_temperature = findViewById(R.id.title_weather_temperature);
+        weather_city = findViewById(R.id.title_weather_city);
+        weather_image = findViewById(R.id.title_weather_image);
+        systemDate = findViewById(R.id.main_header_date);
+
+        externalStorage = findViewById(R.id.main_foot_external_storage);//外部存储
+        bluetoothStatus = findViewById(R.id.main_foot_bluetooth_states);//蓝牙状态
+        wifiStates = findViewById(R.id.main_foot_wifi_states);//网络状态
+        setting = findViewById(R.id.main_foot_setting);//设定
 //        switcher = (ImageView) findViewById(R.id.main_foot_launcher_switcher);
-        btStatus = (ImageView) findViewById(R.id.main_foot_bluetooth_states);
-        setting = (ImageView) findViewById(R.id.main_foot_setting);
         timeHandle.post(timeRun);
-        BluetoothAdapter blueadapter = BluetoothAdapter.getDefaultAdapter();
-        if (blueadapter != null) {
-            if (blueadapter.isEnabled()) {
-                btStatus.setImageResource(R.mipmap.bt_on);
+        BluetoothAdapter bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothadapter != null) {
+            if (bluetoothadapter.isEnabled()) {
+                bluetoothStatus.setImageResource(R.mipmap.bt_on);
             }
         }
     }
@@ -285,12 +291,16 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         tab2.setOnClickListener(this);
         weather.setOnFocusChangeListener(this);
         externalStorage.setOnFocusChangeListener(this);
+        wifiStates.setOnFocusChangeListener(this);
+        bluetoothStatus.setOnFocusChangeListener(this);
 //        switcher.setOnFocusChangeListener(this);
         setting.setOnClickListener(this);
         weather.setOnClickListener(this);
 //        switcher.setOnClickListener(this);
         setting.setOnFocusChangeListener(this);
         externalStorage.setOnClickListener(this);
+        wifiStates.setOnClickListener(this);
+        bluetoothStatus.setOnClickListener(this);
 //        switcher.setOnLongClickListener(this);
         //判断是否有外置存储
         volumes = Util.getPublicVolumes(this);
@@ -367,10 +377,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         startActivity(chooser);
     }
 
-
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        Log.i("bo", "dispatchKeyEvent" + "");
+        Log.i("bo", "dispatchKeyEvent" + event.toString());
         return super.dispatchKeyEvent(event);
     }
 
@@ -416,7 +425,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             if (setting.isFocused()) {
-                setting.setNextFocusLeftId(externalStorage.isFocusable() ? R.id.main_foot_external_storage : R.id.main_foot_setting);
+                setting.setNextFocusLeftId(externalStorage.isFocusable() ? R.id.main_foot_bluetooth_states : R.id.main_foot_setting);
             }
         }
 
@@ -428,7 +437,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         return super.onKeyDown(keyCode, event);
     }
 
-//    @Override
+
+    //    @Override
 //    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 //        if (requestCode == CODE_FOR_ACCESS_COARSE_LOCATION) {
 //            if (permissions[0].equals(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -441,7 +451,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 //            }
 //        }
 //    }
-
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
@@ -488,6 +497,18 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 //                String currentHomePackage = resolveInfo.activityInfo.packageName;
 //                getPackageManager().clearPackagePreferredActivities(currentHomePackage);
 //                break;
+            case R.id.main_foot_bluetooth_states:
+                Intent btIntent = new Intent();
+                btIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ComponentName btComp = new ComponentName(getString(R.string.bt_pkg), getString(R.string.bt_main_activity));
+                btIntent.setComponent(btComp);
+                startActivity(btIntent);
+                break;
+            case R.id.main_foot_wifi_states:
+                Intent wifiIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                wifiIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(wifiIntent);
+                break;
             case R.id.main_foot_setting:
                 Intent settingIntent = new Intent();
                 ComponentName mComp = new ComponentName(getString(R.string.setting_pkg), getString(R.string.setting_main_activity));
@@ -495,7 +516,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 try {
                     startActivity(settingIntent);
                 } catch (Exception e) {
-                    //              L.i("netexon setting not found");
                     settingIntent = new Intent(Settings.ACTION_SETTINGS);
                     startActivity(settingIntent);
                 }
@@ -539,6 +559,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
     //wifi,weather
+
     @SuppressLint("HandlerLeak")
     private Handler mUpdateWeatherHandler = new Handler() {
         @Override
@@ -614,7 +635,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
     };
 
-
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
@@ -645,10 +665,16 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     tab2.setBackgroundColor(getResources().getColor(R.color.blue));
                     break;
                 case R.id.main_header_weather:
-                    AnimUtil.setViewScale(v, new Float(1.5));
+                    AnimUtil.setViewScale(v, 1.5f);
                     break;
                 case R.id.main_foot_external_storage:
-                    AnimUtil.setViewScale(v, new Float(1.5));
+                    AnimUtil.setViewScale(v, 1.5f);
+                    break;
+                case R.id.main_foot_wifi_states:
+                    AnimUtil.setViewScale(v, 1.5f);
+                    break;
+                case R.id.main_foot_bluetooth_states:
+                    AnimUtil.setViewScale(v, 1.5f);
                     break;
                 case R.id.main_foot_setting:
                     setting.setImageResource(R.mipmap.settings_on);
@@ -667,6 +693,12 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     AnimUtil.setViewScaleDefault(v);
                     break;
                 case R.id.main_foot_external_storage:
+                    AnimUtil.setViewScaleDefault(v);
+                    break;
+                case R.id.main_foot_wifi_states:
+                    AnimUtil.setViewScaleDefault(v);
+                    break;
+                case R.id.main_foot_bluetooth_states:
                     AnimUtil.setViewScaleDefault(v);
                     break;
                 case R.id.main_foot_setting:
@@ -714,8 +746,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
     }
 
-    private HomeWatcherReceiver mHomeKeyReceiver = new HomeWatcherReceiver();
-
     private void registerHomeKeyReceiver(Context context) {
         final IntentFilter homeFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         context.registerReceiver(mHomeKeyReceiver, homeFilter);
@@ -727,7 +757,19 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
     }
 
+    private void registerKeyReceiver(Context context) {
+        final IntentFilter keyFilter = new IntentFilter("com.netxeon.lignthome.showapp");
+        context.registerReceiver(keyReceiver, keyFilter);
+    }
+
+    private void unregisterKeyReceiver(Context context) {
+        if (keyReceiver != null) {
+            context.unregisterReceiver(keyReceiver);
+        }
+    }
+
     private class HomeWatcherReceiver extends BroadcastReceiver {
+
         private static final String SYSTEM_DIALOG_REASON_KEY = "reason";
         private static final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
 
@@ -745,6 +787,27 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 }
             }
         }
+    }
+
+    /**
+     * 处理App按键事件广播接收器
+     */
+    private class KeyReceiver extends BroadcastReceiver {
+
+        @SuppressLint("ResourceType")
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            assert action != null;
+            if (action.equals("com.netxeon.lignthome.showapp")) {
+                if (appsFragment == null) {
+                    appsFragment = new AppsFragment();
+                }
+                changeFragment(appsFragment);
+                tab2.requestFocus();
+            }
+        }
+
     }
 
 }

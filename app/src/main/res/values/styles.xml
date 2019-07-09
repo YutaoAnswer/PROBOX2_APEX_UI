@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
   <!--  <style name="AppTheme" parent="android:Theme.NoTitleBar.Fullscreen">
      </style>-->
-    <style name="changebgTheme" parent="android:Theme.Material.Wallpaper.NoTitleBar">
+    <style name="changebgTheme" parent="android:Theme.Wallpaper.NoTitleBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionModeOverlay">true</item>

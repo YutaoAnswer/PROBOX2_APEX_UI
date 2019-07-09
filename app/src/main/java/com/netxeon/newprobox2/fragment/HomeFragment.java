@@ -186,7 +186,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
             for (int i = 0; i < allApps.size(); i++) {
                 ResolveInfo resolveInfo = allApps.get(i);
                 String packageName = resolveInfo.activityInfo.packageName;
-                if (packageName.equals(Data.google)) {
+                String name = resolveInfo.activityInfo.name;
+                if (packageName.equals(Data.google) && name.equals(Data.mClassName)) {
                     Util.insertShortcut(getActivity(), new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name).toString(), Data.HOME);
                 }
                 if (packageName.equals(Data.netflix)) {

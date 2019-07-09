@@ -1,5 +1,6 @@
 package com.netxeon.newprobox2.utils;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -59,7 +60,7 @@ public class ListPopupwindow extends PopupWindow {
     }
 
     private void initView() {
-        mListView = (ListView) conentView.findViewById(R.id.pop_listview);
+        mListView = conentView.findViewById(R.id.pop_listview);
         mAdapter = new ListAdapter();
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -150,11 +151,9 @@ public class ListPopupwindow extends PopupWindow {
      */
     private void setList() {
         if (direction == LEFTPOPUP) {
-            mLeftLiist = new ArrayList<String>();
+            mLeftLiist = new ArrayList<>();
             mLiftMap = Util.getPublicVolumes(mContext);
-            Iterator<Map.Entry<String, String>> it = mLiftMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, String> entry = it.next();
+            for (Map.Entry<String, String> entry : mLiftMap.entrySet()) {
                 mLeftLiist.add(entry.getKey());
             }
         } else {

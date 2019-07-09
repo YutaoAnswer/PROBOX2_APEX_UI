@@ -200,7 +200,7 @@
             android:layout_width="@dimen/footer_image_side"
             android:layout_height="@dimen/footer_image_side"
             android:layout_alignTop="@+id/main_foot_wifi_states"
-            android:layout_marginLeft="@dimen/margin_between_footer_image"
+            android:layout_marginStart="@dimen/margin_between_footer_image"
             android:layout_toEndOf="@+id/main_foot_external_storage"
             android:clickable="false"
             android:focusable="false"

@@ -10,7 +10,9 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
+import android.graphics.Region;
 import android.graphics.Region.Op;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -98,7 +100,11 @@ public class MySinkingView extends FrameLayout {
         path.reset();
         canvas.clipPath(path);
         path.addCircle(width / 2, height / 2, width / 2, Direction.CCW);//Direction.CCW内部
-        canvas.clipPath(path, Op.REPLACE);
+        if(Build.VERSION.SDK_INT >= 28){
+            canvas.clipPath(path);
+        }else {
+            canvas.clipPath(path, Region.Op.XOR);
+        }
 
         if (mFlag == Status.RUNNING) {
             if (mScaledBitmap == null) {
@@ -130,7 +136,6 @@ public class MySinkingView extends FrameLayout {
             postInvalidateDelayed(20);
         }
         canvas.restore();
-
     }
 
     public enum Status {

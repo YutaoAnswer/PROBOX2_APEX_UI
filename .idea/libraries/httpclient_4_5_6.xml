@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="httpclient-4.5.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/src/main/lib/httpclient-4.5.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/src/main/lib/httpcore-4.4.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/src/main/lib/signpost-commonshttp4-1.2.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/src/main/lib/signpost-core-1.2.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

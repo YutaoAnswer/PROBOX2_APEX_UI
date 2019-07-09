@@ -204,18 +204,18 @@ public class Util {
     }
 
     public static Map<String, String> getPublicVolumes(Context context) {
-        StorageManager sm = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+        StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         Map<String, String> map = new HashMap<String, String>();
         try {
             //获取volumeInfo
-            List<Object> volumeInfos = (List<Object>) sm.getClass().getMethod("getVolumes", null).invoke(sm, null);
+            List<Object> volumeInfo = (List<Object>) storageManager.getClass().getMethod("getVolumes", null).invoke(storageManager, null);
             L.d("usb", "start");
-            for (final Object info : volumeInfos) {
+            for (final Object info : volumeInfo) {
                 L.d("usb", "type is : " + info.getClass().getMethod("getType", null).invoke(info, null));
                 //获取设备状态
                 if ((Integer) info.getClass().getMethod("getType", null).invoke(info, null) == 0
                         && (Integer) info.getClass().getMethod("getState", null).invoke(info, null) == 2) {
-                    String name = (String) sm.getClass().getMethod("getBestVolumeDescription", info.getClass()).invoke(sm, info);
+                    String name = (String) storageManager.getClass().getMethod("getBestVolumeDescription", info.getClass()).invoke(storageManager, info);
                     String id = (String) info.getClass().getField("id").get(info);
                     map.put(name, id);
                 } else {

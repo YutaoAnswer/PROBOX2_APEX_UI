@@ -62,7 +62,8 @@
                 android:layout_width="@dimen/weather_image_width"
                 android:layout_height="@dimen/weather_image_height"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/weather3200" />
+                android:src="@mipmap/weather3200"
+                android:contentDescription="@string/contentDescription_weather_image" />
 
         </LinearLayout>
 
@@ -74,7 +75,6 @@
             android:layout_alignTop="@+id/app_title"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="@dimen/header_margin_right"
-            android:text="11:11"
             android:textColor="@color/white"
             android:textSize="@dimen/date_text_size" />
 
@@ -107,7 +107,8 @@
                 android:paddingBottom="@dimen/tabs_padding_top_and_bottom"
                 android:text="@string/tab1"
                 android:textColor="@color/white"
-                android:textSize="@dimen/tab_text_size" />
+                android:textSize="@dimen/tab_text_size"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/main_content_tag2"
@@ -163,7 +164,6 @@
             <!--android:textColor="@color/white"-->
             <!--android:textSize="@dimen/tab_text_size" />-->
 
-
         </RelativeLayout>
 
         <FrameLayout
@@ -172,7 +172,6 @@
             android:layout_height="wrap_content" />
         
     </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/main_footer"
@@ -192,20 +191,20 @@
             android:layout_marginBottom="@dimen/footer_margin_bottom"
             android:clickable="false"
             android:focusable="false"
-            android:src="@mipmap/usb_off" />
-
+            android:src="@mipmap/usb_off"
+            android:contentDescription="@string/contentDescription_external_storage" />
 
         <ImageView
             android:id="@+id/main_foot_ethernet"
             android:layout_width="@dimen/footer_image_side"
             android:layout_height="@dimen/footer_image_side"
             android:layout_alignTop="@+id/main_foot_wifi_states"
-            android:layout_marginLeft="@dimen/margin_between_footer_image"
+            android:layout_marginStart="@dimen/margin_between_footer_image"
             android:layout_toEndOf="@+id/main_foot_external_storage"
             android:clickable="false"
             android:focusable="false"
-            android:src="@mipmap/ethernet_off" />
-
+            android:src="@mipmap/ethernet_off"
+            android:contentDescription="@string/contentDescription_ethernet" />
 
         <ImageView
             android:id="@+id/main_foot_bluetooth_states"
@@ -217,36 +216,41 @@
             android:layout_toEndOf="@+id/main_foot_wifi_states"
             android:adjustViewBounds="false"
             android:baselineAlignBottom="false"
-            android:clickable="false"
+            android:clickable="true"
             android:contextClickable="false"
             android:cropToPadding="false"
-            android:focusable="false"
+            android:focusable="true"
             android:nestedScrollingEnabled="false"
             android:src="@mipmap/bt_off"
-            tools:ignore="RtlHardcoded" />
+            tools:ignore="RtlHardcoded"
+            android:contentDescription="@string/contentDescription_bluetooth_states" />
 
         <ImageView
             android:id="@+id/main_foot_wifi_states"
             android:layout_width="@dimen/footer_image_side"
             android:layout_height="@dimen/footer_image_side"
             android:layout_alignTop="@+id/main_foot_external_storage"
-            android:layout_marginLeft="@dimen/margin_between_footer_image"
+            android:layout_marginStart="@dimen/margin_between_footer_image"
             android:layout_toEndOf="@+id/main_foot_ethernet"
-            android:src="@mipmap/icon_wifi_0" />
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@mipmap/icon_wifi_0"
+            android:contentDescription="@string/contentDescription_wifi_states" />
 
         <ImageView
             android:id="@+id/main_foot_setting"
             android:layout_width="@dimen/footer_image_side"
             android:layout_height="@dimen/footer_image_side"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="@dimen/margin_between_footer_image"
+            android:layout_marginEnd="@dimen/margin_between_footer_image"
             android:layout_marginBottom="@dimen/footer_margin_bottom"
             android:clickable="true"
             android:focusable="true"
             android:layout_alignParentEnd="true"
             android:nextFocusLeft="@+id/main_foot_external_storage"
             android:nextFocusUp="@+id/fragment_home_gridview"
-            android:src="@mipmap/settings_off" />
+            android:src="@mipmap/settings_off"
+            android:contentDescription="@string/contentDescription_setting" />
 
         <ImageView
             android:id="@+id/main_foot_launcher_switcher"
@@ -255,14 +259,14 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
-            android:layout_marginRight="@dimen/margin_between_footer_image"
+            android:layout_marginEnd="@dimen/margin_between_footer_image"
             android:layout_marginBottom="@dimen/footer_margin_bottom"
             android:clickable="true"
             android:focusable="true"
             android:nextFocusUp="@+id/fragment_home_gridview"
-            android:src="@mipmap/switch_off" />
+            android:src="@mipmap/switch_off"
+            android:contentDescription="@string/contentDescription_launcher_switcher" />
 
     </RelativeLayout>
-
 
 </RelativeLayout>

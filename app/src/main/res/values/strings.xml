@@ -46,4 +46,18 @@
     <string name="google_play">com.android.vending</string>
     <string name="file_brower">com.droidlogic.FileBrower</string>
 
+    <string name="contentDescription_setting" translatable="false">setting</string>
+    <string name="contentDescription_wifi_states" translatable="false">wifi_states</string>
+    <string name="contentDescription_bluetooth_states" translatable="false">bluetooth_states</string>
+    <string name="contentDescription_ethernet" translatable="false">ethernet</string>
+    <string name="contentDescription_external_storage" translatable="false">external_stroage</string>
+    <string name="contentDescription_launcher_switcher" translatable="false">launcher_switcher</string>
+    <string name="contentDescription_weather_image" translatable="false">weather_image</string>
+    <string name="action_showapp" translatable="false">com.netxeon.lignthome.showapp</string>
+
+    <string name="wifi_pkg" translatable="false">com.android.settings</string>
+    <string name="wifi_main_activity" translatable="false">com.android.settings.wifi.WifiSettings</string>
+    <string name="bt_pkg" translatable="false">com.android.settings</string>
+    <string name="bt_main_activity" translatable="false">com.android.settings.bluetooth.BluetoothSettings</string>
+
 </resources>

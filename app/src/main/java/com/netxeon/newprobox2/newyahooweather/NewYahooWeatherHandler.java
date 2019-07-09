@@ -23,6 +23,7 @@ import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 
 public class NewYahooWeatherHandler extends AsyncTask<Void, Void, NewYahooWeather> {
+
     private Handler mHandler;
     private String mCity;
 

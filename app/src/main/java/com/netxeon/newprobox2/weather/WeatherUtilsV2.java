@@ -24,16 +24,22 @@ import zh.wang.android.apis.yweathergetter4a.YahooWeatherInfoListener;
  */
 public class WeatherUtilsV2 implements YahooWeatherInfoListener,
         YahooWeatherExceptionListener {
-    public static final String WEATHER_CITY = "locationCity";
+
+    //常量
+    private static final String WEATHER_CITY = "locationCity";
+    private static final long UPDATE_WEATHER_PER_TIME = 3;
+
     public static final int MSG_WEATHER_OK_NEW = 2;
     public static final int MSG_WEATHER_OK = 1;
     public static final int MSG_WEATHER_NO_CITY = 0;
     public static final int MSG_WEATHER_FAILED = -1;
     public static final int MSG_WEATHER_PARSE_CITY_FAILED = -2;
     public static final int MSG_WEATHER_NETWORK_DISCONNECTED = -3;
-    public static final long UPDATE_WEATHER_PER_TIME = 3;
+
     private Context context;
     private Handler weatherHandler;
+
+    //变量
     //访问次数
     private static int currAccessCount = 0;
     //访问最大次数
@@ -42,8 +48,8 @@ public class WeatherUtilsV2 implements YahooWeatherInfoListener,
     private boolean netwokConnecting = false;
     //是否正在访问
     private boolean isAccessing = false;
-
-    private String cityNameTmp = "empty";
+    //城市名暂存
+    private String cityNameTmp;
 
     public WeatherUtilsV2(Context context, Handler weatherHandler) {
         this.context = context;

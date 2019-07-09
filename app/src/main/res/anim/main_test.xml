@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
+
     <objectAnimator
         android:duration="300"
         android:interpolator="@android:interpolator/decelerate_quint"
@@ -7,6 +8,7 @@
         android:valueFrom="500.0dip"
         android:valueTo="0.0dip"
         android:valueType="floatType" />
+
     <objectAnimator
         android:duration="1000"
         android:interpolator="@android:interpolator/accelerate_decelerate"
@@ -14,4 +16,5 @@
         android:valueFrom="0.5"
         android:valueTo="1.0"
         android:valueType="floatType" />
+
 </set>
