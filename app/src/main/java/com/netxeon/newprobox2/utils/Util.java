@@ -7,30 +7,33 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.RemoteException;
 import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.netxeon.newprobox2.bean.Shortcut;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * 通用util
@@ -196,27 +199,26 @@ public class Util {
 
 
     public static List<ResolveInfo> getAllApps(PackageManager pm) {
-        Intent mainintent = new Intent(Intent.ACTION_MAIN, null);
-        mainintent.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> mApps = pm.queryIntentActivities(mainintent, 0);
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> mApps = pm.queryIntentActivities(mainIntent, 0);
         Collections.sort(mApps, new PackagesComparator(pm));
         return mApps;
     }
 
     public static Map<String, String> getPublicVolumes(Context context) {
         StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         try {
             //获取volumeInfo
-            List<Object> volumeInfo = (List<Object>) storageManager.getClass().getMethod("getVolumes", null).invoke(storageManager, null);
-            L.d("usb", "start");
+            List<?> volumeInfo = (List<?>) storageManager.getClass().getMethod("getVolumes", null).invoke(storageManager, null);
             for (final Object info : volumeInfo) {
                 L.d("usb", "type is : " + info.getClass().getMethod("getType", null).invoke(info, null));
                 //获取设备状态
                 if ((Integer) info.getClass().getMethod("getType", null).invoke(info, null) == 0
                         && (Integer) info.getClass().getMethod("getState", null).invoke(info, null) == 2) {
                     String name = (String) storageManager.getClass().getMethod("getBestVolumeDescription", info.getClass()).invoke(storageManager, info);
-                    String id = (String) info.getClass().getField("id").get(info);
+                    String id = (String) info.getClass().getMethod("getId", null).invoke(info, null);
                     map.put(name, id);
                 } else {
                     L.d("usb", "Skipping volume " + info.toString());
@@ -228,4 +230,11 @@ public class Util {
         }
         return map;
     }
+
 }
+
+
+
+
+
+

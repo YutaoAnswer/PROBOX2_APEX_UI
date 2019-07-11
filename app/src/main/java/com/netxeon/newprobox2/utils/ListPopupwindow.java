@@ -69,12 +69,13 @@ public class ListPopupwindow extends PopupWindow {
                 if (direction == LEFTPOPUP) {
                     String usbname = mLeftLiist.get(position);
                     String usbid = mLiftMap.get(usbname);
-                    final Intent i = new Intent();
-                    i.putExtra(mContext.getString(R.string.unmount_sd_volume_id), usbid);
-                    i.putExtra(mContext.getString(R.string.unmount_sd_volume_desc), usbname);
+                    final Intent intent = new Intent();
+                    intent.putExtra(mContext.getString(R.string.unmount_sd_volume_id), usbid);
+                    intent.putExtra(mContext.getString(R.string.unmount_sd_volume_desc), usbname);
                     ComponentName mComp = new ComponentName(mContext.getString(R.string.setting_pkg), mContext.getString(R.string.setting_unmount_sd_activity));
-                    i.setComponent(mComp);
-                    mContext.startActivity(i);
+                    intent.setComponent(mComp);
+                    intent.setAction("");
+                    mContext.startActivity(intent);
                 } else {
                     String pack = mRightList.get(position).activityInfo.packageName;
                     SPUtils.put(mContext, "default_launcher", pack);
