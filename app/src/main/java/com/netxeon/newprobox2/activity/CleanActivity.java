@@ -13,8 +13,6 @@ import com.netxeon.newprobox2.utils.MemoryCleaner;
  */
 public class CleanActivity extends Activity  {
 
-    private int percent = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +27,6 @@ public class CleanActivity extends Activity  {
         if (event.getKeyCode()==KeyEvent.KEYCODE_BACK){
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 }

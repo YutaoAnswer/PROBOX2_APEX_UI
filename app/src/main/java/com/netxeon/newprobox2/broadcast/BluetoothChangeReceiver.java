@@ -8,6 +8,8 @@ import android.widget.ImageView;
 
 import com.netxeon.newprobox2.R;
 
+import java.util.Objects;
+
 /**
  * 监听蓝牙广播
  */
@@ -22,7 +24,7 @@ public class BluetoothChangeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if (intent.getAction() == BluetoothAdapter.ACTION_STATE_CHANGED) {
+        if (Objects.requireNonNull(intent.getAction()).equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
             String stateExtra = BluetoothAdapter.EXTRA_STATE;
             int state = intent.getIntExtra(stateExtra, -1);
 

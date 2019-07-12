@@ -6,7 +6,6 @@
     android:gravity="center">
 
     <com.netxeon.newprobox2.utils.MySinkingView
-
         android:id="@+id/sinking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -17,4 +16,5 @@
             android:layout_height="400dp" />
 
     </com.netxeon.newprobox2.utils.MySinkingView>
+
 </LinearLayout>

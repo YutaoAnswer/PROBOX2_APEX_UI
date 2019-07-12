@@ -39,6 +39,7 @@ import static android.content.ContentValues.TAG;
  * 通用util
  */
 public class Util {
+
     public static final String DB_FILE = "probox.db";
     public static final String WALLPAPER_FILE = "wallpaper.png";
     public static final String PRE_FILE = "prefile";
@@ -63,7 +64,6 @@ public class Util {
         i.addCategory("android.intent.category.HOME");
         return pm.queryIntentActivities(i, 0);
     }
-
 
     /**
      * 数据库中插入该Ａｐｐ
@@ -103,7 +103,7 @@ public class Util {
                 newVersion = metaData.getInt(metaKey);
             }
         } catch (PackageManager.NameNotFoundException e) {
-
+            e.printStackTrace();
         }
         return newVersion;
     }
@@ -133,7 +133,7 @@ public class Util {
         try {
             InputStream is = context.getAssets().open(WALLPAPER_FILE);
             byte[] buffer = new byte[1024];
-            int count = 0;
+            int count;
             PIC_DIR = context.getFilesDir().getAbsolutePath();
             File picDir = new File(PIC_DIR);
             if (!picDir.exists()) picDir.mkdirs();
@@ -146,12 +146,10 @@ public class Util {
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
         }
         MediaScannerConnection.scanFile(context, new String[]{PIC_DIR + File.separator + WALLPAPER_FILE}, null, new MediaScannerConnection.OnScanCompletedListener() {
             public void onScanCompleted(String path, Uri uri) {
                 //            L.i("Scanned " + path);
-
                 try {
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
                     WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);

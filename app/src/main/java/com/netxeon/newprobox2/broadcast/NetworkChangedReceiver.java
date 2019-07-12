@@ -36,7 +36,7 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Objects.equals(intent.getAction(), WifiManager.RSSI_CHANGED_ACTION) || intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+        if (Objects.equals(intent.getAction(), WifiManager.RSSI_CHANGED_ACTION) || Objects.equals(intent.getAction(), ConnectivityManager.CONNECTIVITY_ACTION)) {
             boolean updateWeather = intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION);//网络状态改变
             initNetwork(updateWeather);
         }
@@ -59,9 +59,6 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
             if (System.currentTimeMillis() - mLastWeatherUpdate > UPDATE_WEATHER_PER_TIME) {
                 mLastWeatherUpdate = System.currentTimeMillis();
                 initWeather();
-                //               L.i("NetworkChangedReceiver.initNetwork() update weather now ");
-            } else {
-                //             L.i("NetworkChangedReceiver.initNetwork() no need update weather yet ");
             }
         }
         ImageView wifi_image = (ImageView) mContext.findViewById(R.id.main_foot_wifi_states);
@@ -76,6 +73,7 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
                 ethernat.setImageResource(R.mipmap.ethernet_on);
                 wifi_image.setImageResource(R.mipmap.icon_wifi_0);
             } else {
+                ethernat.setImageResource(R.mipmap.ethernet_off);
                 WifiManager manager = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 int level = WifiManager.calculateSignalLevel(manager.getConnectionInfo().getRssi(), 5);
                 //            L.i(level+"level");

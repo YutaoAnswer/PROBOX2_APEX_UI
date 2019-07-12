@@ -279,8 +279,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                 startThirdAppforPM(getResources().getString(R.string.google_play));
                 break;
             case R.id.home_icon_left_row3:
-                Intent cleanapp = new Intent(getActivity(), CleanActivity.class);
-                startActivity(cleanapp);
+                Intent cleanApp = new Intent(getActivity(), CleanActivity.class);
+                startActivity(cleanApp);
                 break;
             case R.id.home_icon_movie:
                 startCateFragment(Data.MOVIE);
