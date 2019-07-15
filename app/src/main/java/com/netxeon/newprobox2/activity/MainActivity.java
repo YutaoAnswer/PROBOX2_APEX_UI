@@ -16,14 +16,18 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.LocaleList;
 import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -52,7 +56,9 @@ import com.netxeon.newprobox2.weather.WeatherUtils;
 import com.netxeon.newprobox2.weather.WeatherUtilsV2;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 
 import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
@@ -87,6 +93,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private IntentFilter mFilter;
 
     private NetworkChangedReceiver mNetworkChangedReceiver;
+    private LocaleChangeReceiver localeChangeReceiver;
+
     private UsbChangeReceiver mUsbChangeReceiver;
     private BluetoothChangeReceiver mBluetoothChangeReceiver;
 
@@ -177,7 +185,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         weatherUtilsV2 = new WeatherUtilsV2(MainActivity.this, weatherHandler);
-        //db
+
         int lastDatabaseVersion = Util.getInt(this, Data.PRE_DB_VERSION);//获取上一版本数据库如果第一次则是0
         final int newDatabaseVersion = Util.getNewDatabaseVersion(this, Data.PRE_DB_VERSION);//获取xml里设置的数据库版本
         if (lastDatabaseVersion < newDatabaseVersion) {
@@ -191,12 +199,14 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         mContext = this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER);//壁纸
         setContentView(R.layout.activity_main);
+        init();
         initView();
         initNetworkDisplay();
         initUsbDisplay();
         initBluetoothDisplay();
         setListener();
         setDefaultFragment(savedInstanceState != null);
+
     }
 
     @Override
@@ -206,6 +216,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         registerKeyReceiver(this);
         registerHomeKeyReceiver(this);
         registerReceiver(mNetworkChangedReceiver, mFilter);
+        registerReceiver(localeChangeReceiver, new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
     }
 
     @Override
@@ -214,6 +225,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         unregisterKeyReceiver(this);
         unregisterHomeKeyReceiver(this);
         unregisterReceiver(mNetworkChangedReceiver);
+        unregisterReceiver(localeChangeReceiver);
     }
 
     @Override
@@ -226,6 +238,10 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    private void init() {
+        localeChangeReceiver = new LocaleChangeReceiver();
     }
 
     private void initNetworkDisplay() {
@@ -425,7 +441,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             if (setting.isFocused()) {
-                setting.setNextFocusLeftId(externalStorage.isFocusable() ? R.id.main_foot_bluetooth_states : R.id.main_foot_setting);
+                setting.setNextFocusLeftId(externalStorage.isFocusable() ? R.id.main_foot_bluetooth_states : R.id.main_foot_bluetooth_states);
             }
         }
 
@@ -807,7 +823,158 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 tab2.requestFocus();
             }
         }
+    }
 
+
+    private void initAppLanguage(Context context) {
+        if (context == null) {
+            return;
+        }
+
+        Locale locale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//Android 7.0 getResource().getConfiguration.locale被标记为deprecated了，所以初步适配
+            locale = LocaleList.getDefault().get(0);
+        } else {
+            locale = Locale.getDefault();
+        }
+        String language = locale.getLanguage() + "-" + locale.getCountry();
+        Log.i(TAG, "initAppLanguage: " + language);
+
+        Configuration config = context.getResources().getConfiguration();
+        switch (language) {
+            case "zh-CN":
+                config.locale = Locale.CHINA;
+                break;
+            case "zh-TW":
+                config.locale = Locale.TAIWAN;
+                break;
+            case "zh-HK":
+                config.locale = Locale.TAIWAN;
+                break;
+            case "ja-jp":
+                config.locale = Locale.JAPAN;
+                break;
+            case "af-ZA":
+                break;
+            case "ca-ES":
+                break;
+            case "cs-CZ":
+                break;
+            case "da-DK"://Dansk
+                break;
+            case "de-DE"://Deutsch
+                break;
+            case "en-AU"://English(Australia)
+                break;
+            case "en-IN"://English(India)
+                break;
+            case "en-GB"://English(United Kingdom)
+                break;
+            case "en-US"://English(United States)
+                break;
+            case "es-ES"://Espanol(Espana)
+                break;
+            case "es-US"://Espanol(Estados Unidos)
+                break;
+            case "fil-PH"://Filipino
+                break;
+            case "fr-CA"://Francais(Canada)
+                break;
+            case "fr-FR"://Francais(France)
+                break;
+            case "hr-HR"://Hrvatski
+                break;
+            case "in-ID"://Indonesia
+                break;
+//            case ""://isZulu
+//                break;
+//            case ""://Italiano
+//                break;
+//            case ""://Kiswahili
+//                break;
+//            case ""://Latviesu
+//                break;
+//            case ""://Lietuviu
+//                break;
+//            case ""://Magyar
+//                break;
+//            case ""://Melayu
+//                break;
+//            case ""://Nederlands
+//                break;
+//            case ""://Norsk bokmal
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+//            case ""://
+//                break;
+            case "en":
+                config.locale = Locale.US;
+            default:
+                break;
+        }
+//        config.locale = Locale.US;
+        context.getResources().updateConfiguration(config
+                , context.getResources().getDisplayMetrics());
+        restartAct();
+    }
+
+    private void restartAct() {
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
+        Log.d(TAG, "restartAct: restart");
+        overridePendingTransition(0, 0);
+    }
+
+    /**
+     * ClassName: LocaleChangeReceiver
+     * Description:(这里用一句话描述这个类的作用)
+     * Created by chensf on 2016-8-17 16:47.
+     */
+    public class LocaleChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.v(TAG, "mReceiver  onReceive  intent.getAction(): " + intent.getAction());
+            if (Objects.equals(intent.getAction(), Intent.ACTION_LOCALE_CHANGED)) {
+                Log.e("LocaleChangeReceiver", "Language change");
+                initAppLanguage(context);
+            }
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.e("MyApplication", "onConfigurationChanged");
+        super.onConfigurationChanged(newConfig);
+        initAppLanguage(getBaseContext());
     }
 
 }

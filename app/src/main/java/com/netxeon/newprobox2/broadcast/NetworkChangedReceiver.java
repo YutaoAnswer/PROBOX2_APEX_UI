@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.widget.ImageView;
 
 import com.netxeon.newprobox2.R;
+import com.netxeon.newprobox2.utils.L;
 import com.netxeon.newprobox2.utils.Util;
 import com.netxeon.newprobox2.weather.WeatherUtils;
 import com.netxeon.newprobox2.weather.WeatherUtilsV2;
@@ -67,16 +68,17 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
         if (!available) {
             ethernat.setImageResource(R.mipmap.ethernet_off);
             wifi_image.setImageResource(R.mipmap.icon_wifi_0);
-            //         L.i("NetworkChangedReceiver:networkstate_off");
+            L.i("NetworkChangedReceiver:networkstate_off");
         } else {
             if (ethernet) {
                 ethernat.setImageResource(R.mipmap.ethernet_on);
                 wifi_image.setImageResource(R.mipmap.icon_wifi_0);
+                L.i("NetworkChangedReceiver:networkstate_on");
             } else {
                 ethernat.setImageResource(R.mipmap.ethernet_off);
                 WifiManager manager = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 int level = WifiManager.calculateSignalLevel(manager.getConnectionInfo().getRssi(), 5);
-                //            L.i(level+"level");
+                L.i(level + "level");
                 wifi_image.setImageResource(R.drawable.wifi_signl);
                 switch (level) {
                     case 1:

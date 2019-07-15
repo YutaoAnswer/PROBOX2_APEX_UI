@@ -18,7 +18,9 @@ import android.os.RemoteException;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.netxeon.newprobox2.bean.Shortcut;
 
@@ -150,9 +152,15 @@ public class Util {
         MediaScannerConnection.scanFile(context, new String[]{PIC_DIR + File.separator + WALLPAPER_FILE}, null, new MediaScannerConnection.OnScanCompletedListener() {
             public void onScanCompleted(String path, Uri uri) {
                 //            L.i("Scanned " + path);
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
+                int widthPixels = displayMetrics.widthPixels;
+                int heightPixels = displayMetrics.heightPixels;
                 try {
+
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
                     WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+                    wallpaperManager.suggestDesiredDimensions(widthPixels, heightPixels);
                     wallpaperManager.setBitmap(bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
