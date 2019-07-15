@@ -22,6 +22,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.netxeon.newprobox2.R;
 import com.netxeon.newprobox2.bean.Shortcut;
 
 import java.io.File;
@@ -125,49 +126,60 @@ public class Util {
             is.close();
             Util.setInt(context, Data.PRE_DB_VERSION, newDatabaseVersion);
         } catch (Exception e) {
-            //L.i("-------Util.copyDatabaseFromAssert() error:" + e.toString());
+            L.i("-------Util.copyDatabaseFromAssert() error:" + e.toString());
         }
         //       L.i("-------Util.copyDatabaseFromAssert() completed");
     }
 
     public static void copyWallpaperFromAssert(final Context context) {
 //        L.i("-------Util.copyWallpaperFromAssert() start");
+//        try {
+//            InputStream is = context.getAssets().open(WALLPAPER_FILE);
+//            byte[] buffer = new byte[1024];
+//            int count;
+//            PIC_DIR = context.getFilesDir().getAbsolutePath();
+//            File picDir = new File(PIC_DIR);
+//            if (!picDir.exists()) picDir.mkdirs();
+//            FileOutputStream out = new FileOutputStream(PIC_DIR + File.separator + WALLPAPER_FILE);
+//            while ((count = is.read(buffer)) > 0) {
+//                out.write(buffer, 0, count);
+//                out.flush();
+//            }
+//            out.close();
+//            is.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        MediaScannerConnection.scanFile(context, new String[]{PIC_DIR + File.separator + WALLPAPER_FILE}, null, new MediaScannerConnection.OnScanCompletedListener() {
+//            public void onScanCompleted(String path, Uri uri) {
+//                //            L.i("Scanned " + path);
+//                DisplayMetrics displayMetrics = new DisplayMetrics();
+//                ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
+//                int widthPixels = displayMetrics.widthPixels;
+//                int heightPixels = displayMetrics.heightPixels;
+//                try {
+//                    Bitmap bitmap = BitmapFactory.decodeFile(path);
+//                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+//                    wallpaperManager.suggestDesiredDimensions(widthPixels, heightPixels);
+//                    wallpaperManager.setBitmap(bitmap);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+        Log.d("updateWallpaper", "updateWallpaper: width" + width + "height" + height);
         try {
-            InputStream is = context.getAssets().open(WALLPAPER_FILE);
-            byte[] buffer = new byte[1024];
-            int count;
-            PIC_DIR = context.getFilesDir().getAbsolutePath();
-            File picDir = new File(PIC_DIR);
-            if (!picDir.exists()) picDir.mkdirs();
-            FileOutputStream out = new FileOutputStream(PIC_DIR + File.separator + WALLPAPER_FILE);
-            while ((count = is.read(buffer)) > 0) {
-                out.write(buffer, 0, count);
-                out.flush();
-            }
-            out.close();
-            is.close();
-        } catch (Exception e) {
+            //主程序使用，指定壁纸的尺寸
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(context.getApplicationContext());
+            wallpaperManager.suggestDesiredDimensions(width, height);
+            wallpaperManager.setResource(R.raw.wallpaper);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        MediaScannerConnection.scanFile(context, new String[]{PIC_DIR + File.separator + WALLPAPER_FILE}, null, new MediaScannerConnection.OnScanCompletedListener() {
-            public void onScanCompleted(String path, Uri uri) {
-                //            L.i("Scanned " + path);
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
-                int widthPixels = displayMetrics.widthPixels;
-                int heightPixels = displayMetrics.heightPixels;
-                try {
-
-                    Bitmap bitmap = BitmapFactory.decodeFile(path);
-                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
-                    wallpaperManager.suggestDesiredDimensions(widthPixels, heightPixels);
-                    wallpaperManager.setBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
         //       L.i("-------Util.copyWallpaperFromAssert() completed");
     }
 

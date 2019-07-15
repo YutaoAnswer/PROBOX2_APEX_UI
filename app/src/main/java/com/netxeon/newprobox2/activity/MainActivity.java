@@ -186,13 +186,13 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         super.onCreate(savedInstanceState);
         weatherUtilsV2 = new WeatherUtilsV2(MainActivity.this, weatherHandler);
 
+//        Util.copyWallpaperFromAssert(MainActivity.this);
         int lastDatabaseVersion = Util.getInt(this, Data.PRE_DB_VERSION);//获取上一版本数据库如果第一次则是0
         final int newDatabaseVersion = Util.getNewDatabaseVersion(this, Data.PRE_DB_VERSION);//获取xml里设置的数据库版本
         if (lastDatabaseVersion < newDatabaseVersion) {
             new Thread() {
                 public void run() {
                     Util.copyDatabaseFromAssert(MainActivity.this, newDatabaseVersion);//顺便把数据库版本set进去
-                    Util.copyWallpaperFromAssert(MainActivity.this);
                 }
             }.start();
         }
@@ -206,13 +206,13 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         initBluetoothDisplay();
         setListener();
         setDefaultFragment(savedInstanceState != null);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 //        lastTag.requestFocus();
+        Util.copyWallpaperFromAssert(MainActivity.this);
         registerKeyReceiver(this);
         registerHomeKeyReceiver(this);
         registerReceiver(mNetworkChangedReceiver, mFilter);
